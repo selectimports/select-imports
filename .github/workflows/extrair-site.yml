@@ -1,0 +1,38 @@
+name: Extrair arquivos do site
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  extrair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Extrair arquivos do site
+        run: |
+          ZIP=$(find . -maxdepth 1 -name 'select-imports-arquivos-extraidos.zip' -print -quit)
+          if [ -z "$ZIP" ]; then
+            echo "ZIP não encontrado."
+            exit 1
+          fi
+
+          mkdir -p /tmp/site
+          unzip -o "$ZIP" -d /tmp/site
+          cp -a /tmp/site/. .
+          rm -f "$ZIP"
+
+      - name: Salvar arquivos extraídos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Extrair arquivos do site" || echo "Sem alterações"
+          git push
