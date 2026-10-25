@@ -153,6 +153,12 @@ input[type=search],section.b select{font-size:16px;line-height:1.359}section.b s
 .sg button{padding:7.4px 10px}.sg svg{display:block;margin:0}
 .wm{display:block;height:40px;aspect-ratio:2.7;background:#48336C;-webkit-mask:url(../icons/logotipo-escuro.png) left center/contain no-repeat;mask:url(../icons/logotipo-escuro.png) left center/contain no-repeat}
 :root[data-theme="dark"] .wm{background:#E3D0E5}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wm{background:#E3D0E5}}
+/* fotos do card deslizam com o dedo (igual na página do produto) */
+.card .trk{touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+.card:has(.trk:active){transform:none}
+/* aviso de volta ao estoque */
+input[type=tel]{width:100%;min-height:44px;padding:10px 12px;border-radius:var(--r-m);border:1px solid var(--bds);background:var(--card);color:var(--ink);margin-bottom:8px;font-size:16px;line-height:1.359}
+input[type=tel]:focus{border-color:var(--btn);box-shadow:0 0 0 3px var(--ring);outline:0}
 </style></head><body>
 <div class="ann" id="ann" hidden></div>
 <div class="w" style="padding-top:14px"><main id="app"><div class="empty" role="status">Carregando a vitrine...</div></main></div>
@@ -280,7 +286,7 @@ setR(rg('cp'),on.pickvar&&a.length?`<span class="lb">Capacidade</span><div class
 setR(rg('co'),false&&vc.length?`<span class="lb" id="cl"></span><div class="dt" style="margin:0 0 6px">${vc.map(y=>`<button data-col="${X(y.col)}" aria-label="${X(y.col)}" aria-pressed="false"><i class="cd" style="background:${y.hex}"></i></button>`).join('')}</div>`:'');
 const same=on.pickvar&&m.v.every(y=>y.k)?m.v.filter(y=>y.k===x.k):m.v;
 setR(rg('vo'),same.length>1?`<span class="lb">Escolha o aparelho (toque na foto)</span><div class="vt">${same.map(y=>`<button class="vtl" data-vid="${X(y.id)}" aria-pressed="false" aria-label="${X(nmOf(m,y))}"><span class="vim">${y.ph&&y.ph[0]?`<img alt="" loading="lazy" decoding="async" src="${X(y.ph[0])}">`:`<i style="background:${y.hex||'#B8B4C8'}"></i>`}</span><span class="vl">${X(y.col||y.d||m.n)}</span><span class="vc">${X(y.co||'')}${y.bat?' · bat. '+X(y.bat)+'%':''}</span><b>${cfg.preco&&pv(y)>0?R(pv(y)):'Consulte'}</b></button>`).join('')}</div>`:'');
-setR(rg('pi'),`<div style="margin:12px 0 4px">${pb(x,1)}</div>${on.stock?`<div class="sm" style="margin:6px 0 12px">${DL[x.disp]}</div>`:''}${x.desc?`<p style="margin:8px 0;color:var(--mute)">${X(x.desc)}</p>`:''}${fic}${esg&&on.notify?waA(m,x,'btn sf" style="margin-bottom:10px','Avise-me quando chegar'):''}${x.disp=='enc'&&on.preorder?waA(m,x,'btn sf" style="margin-bottom:10px','Encomendar com 50% de entrada'+(cfg.preco&&pv(x)>0?' ('+R(pv(x)/2)+')':'')):''}`);
+setR(rg('pi'),`<div style="margin:12px 0 4px">${pb(x,1)}</div>${on.stock?`<div class="sm" style="margin:6px 0 12px">${DL[x.disp]}</div>`:''}${x.desc?`<p style="margin:8px 0;color:var(--mute)">${X(x.desc)}</p>`:''}${fic}${esg&&on.notify?avBtn(m,x):''}${x.disp=='enc'&&on.preorder?waA(m,x,'btn sf" style="margin-bottom:10px','Encomendar com 50% de entrada'+(cfg.preco&&pv(x)>0?' ('+R(pv(x)/2)+')':'')):''}`);
 setR(rg('sh'),on.share?`<button class="btn sf" data-share style="width:100%;margin:6px 0">Compartilhar link</button>`:'');
 setR(rg('st'),steps());
 $$('[data-cap]').forEach(b=>{const o=b.dataset.cap===x.k;b.classList.toggle('on',o);b.setAttribute('aria-pressed',o)});
@@ -301,6 +307,25 @@ if(navigator.share){try{await navigator.share({title:cfg.nome,url:u});return}cat
 try{await navigator.clipboard.writeText(u);return toast('Link copiado')}catch(e){}
 try{const t=document.createElement('textarea');t.value=u;t.setAttribute('readonly','');t.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(t);t.select();const ok=document.execCommand('copy');t.remove();if(ok)return toast('Link copiado')}catch(e){}
 prompt('Copie o link:',u)}
+/* ---------- aviso quando voltar ao estoque ---------- */
+const avGet=()=>{try{return JSON.parse(localStorage.getItem('va')||'[]')}catch(e){return[]}};
+const avBtn=(m,x)=>avGet().includes(String(x.id))?`<div class="btn sf" role="status" style="margin-bottom:10px;cursor:default">✓ Você será avisado no WhatsApp</div>`:`<button type="button" class="btn sf" data-avs="${X(x.id)}" style="margin-bottom:10px;width:100%">Avise-me quando chegar</button>`;
+function avForm(id){const m=cur(),x=m&&m.v.find(y=>String(y.id)===String(id));if(!x)return;let w='';try{w=localStorage.getItem('vw')||''}catch(e){}
+open(`<h2>Avise-me quando chegar</h2><p class="sm" style="margin:0 0 12px">${X(nmOf(m,x))}</p><label class="lb" for="avw">Seu WhatsApp (com DDD)</label><input type="tel" id="avw" inputmode="tel" autocomplete="tel" placeholder="(69) 99999-9999" value="${X(w)}"><p class="sm" style="margin:0 0 14px">Usamos seu número só para avisar quando este aparelho voltar ao estoque.</p><button type="button" class="btn" data-avok="${X(id)}" style="width:100%">Quero ser avisado</button><button type="button" class="btn sf" data-close style="width:100%;margin-top:8px">Cancelar</button>`,'Avisar quando chegar')}
+async function avSend(btn){const id=btn.dataset.avok,m=cur(),x=m&&m.v.find(y=>String(y.id)===String(id)),inp=$('#avw');if(!x||!inp)return;let d=inp.value.replace(/\D/g,'');if(d.length===10||d.length===11)d='55'+d;if(!/^55\d{10,11}$/.test(d))return toast('Digite o DDD e o número do WhatsApp');
+if(PREV||!OK){close();return toast('Prévia: o aviso não é enviado')}
+btn.disabled=true;const t0=btn.textContent;btn.textContent='Enviando...';
+try{const r=await fetch(U0+'/rest/v1/vitrine_avisos',{method:'POST',headers:{apikey:K0,Authorization:'Bearer '+K0,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({produto_id:String(x.id),produto:nmOf(m,x),modelo:m.n,cap:x.k||'',cond:x.co||'',whats:d})});
+if(!(r.ok||r.status===409))throw new Error(r.status);
+try{const a=avGet();a.push(String(x.id));localStorage.setItem('va',JSON.stringify(a.slice(-60)));localStorage.setItem('vw',inp.value)}catch(e){}
+close();toast('Pronto! Avisamos pelo WhatsApp quando chegar');updProd();bar()}
+catch(e){btn.disabled=false;btn.textContent=t0;toast('Não consegui registrar agora. Tente de novo.')}}
+/* ---------- fotos do card: deslizar com o dedo troca a foto e não abre o produto ---------- */
+(()=>{let s=null,sw=0;
+addEventListener('touchstart',e=>{const t=e.target.closest&&e.target.closest('.card .trk');if(!t||e.touches.length!==1){s=null;return}const p=e.touches[0];s={t,x:p.clientX,y:p.clientY,l:t.scrollLeft}},{passive:true});
+addEventListener('touchend',e=>{const q=s;s=null;if(!q)return;const p=e.changedTouches[0],dx=p.clientX-q.x,dy=p.clientY-q.y;if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy))return;sw=Date.now();
+setTimeout(()=>{const w=q.t.clientWidth,n=q.t.children.length;if(!w||Math.abs(q.t.scrollLeft-q.l)>w*.15)return;const i=Math.max(0,Math.min(n-1,Math.round(q.l/w)+(dx<0?1:-1)));q.t.scrollTo({left:i*w,behavior:smooth()})},120)},{passive:true});
+document.addEventListener('click',e=>{if(Date.now()-sw<400&&e.target.closest&&e.target.closest('.card .art')){e.stopPropagation();e.preventDefault()}},true)})();
 /* ---------- navegação ---------- */
 function goHome(back){if(back)slideIn({sel:'.w',dir:'b'});view={n:'home'};try{if(location.search)history.replaceState(history.state,'',location.pathname)}catch(e){}rr();back?requestAnimationFrame(()=>scrollTo(0,homeY)):scrollTo(0,0)}
 function openP(m,x){homeY=scrollY;view={n:'prod',id:m.id,k:x.k,col:x.col,vid:x.id};try{history.pushState({v:1},'','?p='+encodeURIComponent(x.id))}catch(e){}rr();scrollTo(0,0);slideIn({sel:'.w',dir:'f'})}
@@ -328,7 +353,7 @@ if(t===$('#ov')||d('[data-close]'))return close();
 const tk=d('[data-tk]');if(tk){const s=tk.dataset.tk,i=s.indexOf(':');track(i<0?s:s.slice(0,i),i<0?null:s.slice(i+1))}
 if(d('[data-trade]'))tw();
 if(d('a'))return;
-if(d('[data-retry]'))return load(true);
+if(d('[data-avs]'))return avForm(v('[data-avs]','data-avs'));if(d('[data-avok]'))return avSend(d('[data-avok]'));if(d('[data-retry]'))return load(true);
 if(d('[data-clr]')){q='';fl.cat='';fl.cond='';fl.price=0;fl.av=false;const i=$('#q');if(i)i.value='';sync();list();return}
 if(d('[data-tg]')){const n=eff()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('vt',n)}catch(x){}return tbtn()}
 if(d('[data-fav]')){const b=d('[data-fav]'),i=b.dataset.fav,a=!favs.has(i);a?favs.add(i):favs.delete(i);$$('[data-fav="'+i+'"]').forEach(f=>{f.textContent=a?'♥':'♡';f.setAttribute('aria-pressed',a);f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop')});touch(i);return bar()}
