@@ -261,6 +261,22 @@
     var r = await sb.from('vitrine_cliques').select('produto_id,tipo,em').gte('em', new Date(Date.now() - dias * 864e5).toISOString()).limit(5000);
     return r.error ? null : r.data;
   };
+  /* avisos de volta ao estoque (pedidos feitos na vitrine) */
+  window.sbAvisos = async function () {
+    await init();
+    var r = await sb.from('vitrine_avisos').select('id,produto_id,produto,modelo,cap,cond,whats,em,avisado_em').is('avisado_em', null).order('em', { ascending: false }).limit(500);
+    return r.error ? null : r.data;
+  };
+  window.sbAvisoMarcar = async function (ids) {
+    await init();
+    var r = await sb.from('vitrine_avisos').update({ avisado_em: new Date().toISOString() }).in('id', ids);
+    return r.error ? r.error.message : null;
+  };
+  window.sbAvisoDel = async function (ids) {
+    await init();
+    var r = await sb.from('vitrine_avisos').delete().in('id', ids);
+    return r.error ? r.error.message : null;
+  };
   window.sbBackup = async function (name, json) {
     await init();
     var r = await sb.storage.from('backups').upload(name, new Blob([json], { type: 'application/json' }), { upsert: true, contentType: 'application/json' });
