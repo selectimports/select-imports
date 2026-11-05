@@ -160,9 +160,23 @@ input[type=search],section.b select{font-size:16px;line-height:1.359}section.b s
 input[type=tel]{width:100%;min-height:44px;padding:10px 12px;border-radius:var(--r-m);border:1px solid var(--bds);background:var(--card);color:var(--ink);margin-bottom:8px;font-size:16px;line-height:1.359}
 input[type=tel]:focus{border-color:var(--btn);box-shadow:0 0 0 3px var(--ring);outline:0}
 
+
+/* ===== logo em todas as telas ===== */
+.gh{display:none}
+body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 0 8px}
+.ghi{max-width:960px;margin:0 auto;padding:0 16px}
+.gb{display:flex;align-items:center;gap:10px;padding:2px 0;color:var(--ink)}
+.gb .lg{width:38px;height:38px;border-radius:10px}.gb .wm{height:30px}.gb .hn{font-size:16px}
+/* ===== galeria do produto: setas, contador e miniaturas ===== */
+.gn{position:absolute;top:50%;margin-top:-21px;width:42px;height:42px;border-radius:50%;background:var(--card);color:var(--ink);border:1px solid var(--line);display:grid;place-items:center;font-size:26px;line-height:1;padding-bottom:3px;box-shadow:0 4px 14px rgba(0,0,0,.18);z-index:2;transition:transform .12s ease,background-color .16s ease}
+.gn.l{left:10px}.gn.r{right:10px}.gn:hover{background:var(--soft)}.gn:active{transform:scale(.92)}
+.gc{position:absolute;left:10px;top:10px;z-index:2;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(0,0,0,.5);color:#fff}
+.art.z .gn{display:none}
+.thm img{width:64px;height:64px}
+@media (max-width:420px){.gn{width:36px;height:36px;margin-top:-18px;font-size:22px}}
 /* ===== COMPUTADOR (>=1024px): layout de marketplace. O celular não muda. ===== */
 @media (min-width:1024px){
-.w{max-width:1280px;padding:0 32px}footer{max-width:1280px;padding:0 32px}
+.w{max-width:1280px;padding:0 32px}footer{max-width:1280px;padding:0 32px}.ghi{max-width:1280px;padding:0 32px}.gb .lg{width:44px;height:44px}.gb .wm{height:34px}
 .ann{font-size:14px;padding:10px 12px}
 .pf{margin:8px 0 18px;gap:16px}.pf .lg{width:64px;height:64px}.pf>div:last-child{flex-direction:row!important;gap:6px!important}
 .hmc{display:grid;grid-template-columns:252px minmax(0,1fr);column-gap:32px;align-items:start}
@@ -188,18 +202,19 @@ input[type=tel]:focus{border-color:var(--btn);box-shadow:0 0 0 3px var(--ring);o
 .card .ar{opacity:0;transition:opacity .15s ease}.card:hover .ar{opacity:1}
 .nm{font-size:15px;margin:12px 4px 2px}.pr{font-size:22px}
 /* página do produto em duas colunas */
-.pp{max-width:1120px}
+.pp{max-width:1216px}
 .pdc{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:44px;align-items:start;margin-top:8px}
 .pdl{position:sticky;top:16px}.pdl #ga{margin:0!important;border:1px solid var(--line)}
-.thm{gap:10px;padding:12px 0}.thm img{width:68px;height:68px}
+.thm{gap:10px;padding:12px 0;flex-wrap:wrap;overflow:visible}.thm img{width:76px;height:76px}.thm img:hover{border-color:var(--brbd)}
 .pdr h1{font-size:30px!important}
 /* janelas centralizadas */
 .ov{align-items:center;padding:24px}.sh{max-width:640px;border-radius:var(--r-l);max-height:86vh;padding-bottom:20px}
 .bar{padding:12px 32px}.bar .btn{max-width:420px}
 }
-@media (min-width:1500px){.w{max-width:1400px}.grid{grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}}
-</style></head><body>
+@media (min-width:1500px){.w,.ghi,footer{max-width:1400px}.pp{max-width:1336px}.grid{grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}}
+</style></head><body class="np">
 <div class="ann" id="ann" hidden></div>
+<header class="gh" id="gh"><div class="ghi"><button type="button" class="gb" data-home aria-label="Ir para o início da vitrine"><img class="lg" src="../icons/icon-192.png" alt=""><i class="wm" role="img" aria-label="select imports"></i></button></div></header>
 <div class="w" style="padding-top:14px"><main id="app"><div class="empty" role="status">Carregando a vitrine...</div></main></div>
 <footer id="ft"></footer>
 <a class="fab" id="fab" href="#" target="_blank" rel="noopener" aria-label="WhatsApp" data-tk="whatsapp" hidden></a>
@@ -232,7 +247,7 @@ const need=items.filter(it=>{const n=old.get(it.k);return !(n&&n.__h===it.h)}),t
 let d=0;const nodes=items.map(it=>{let n=fresh.get(it.k);if(!n)return old.get(it.k);n.__k=it.k;n.__h=it.h;if(!old.has(it.k)&&!RM.matches&&d<14){n.classList.add('in');n.style.setProperty('--d',Math.min(d++,8)*22+'ms');n.addEventListener('animationend',()=>n.classList.remove('in'),{once:true})}return n});
 const keep=new Set(nodes);[...host.children].forEach(n=>keep.has(n)||n.remove());nodes.forEach((n,i)=>{if(host.children[i]!==n)host.insertBefore(n,host.children[i]||null)})}
 /* galeria por deslizar: mantém pontinhos, miniaturas e índice em sincronia com a rolagem */
-function syncG(i){$$('#pd .thm img').forEach((n,j)=>{n.classList.toggle('on',j===i);if(j===i&&n.scrollIntoView)try{n.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'})}catch(e){}});$$('#ga .dots i').forEach((n,j)=>n.classList.toggle('on',j===i))}
+function syncG(i){$$('#pd .thm img').forEach((n,j)=>{n.classList.toggle('on',j===i);if(j===i&&n.scrollIntoView)try{n.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'})}catch(e){}});$$('#ga .dots i').forEach((n,j)=>n.classList.toggle('on',j===i));{const c=$('#ga .gc'),tr=$('#ga .trk');if(c&&tr)c.textContent=(i+1)+' / '+tr.children.length}}
 let rafT=0;addEventListener('scroll',e=>{const t=e.target;if(!t||!t.classList||!t.classList.contains('trk'))return;cancelAnimationFrame(rafT);rafT=requestAnimationFrame(()=>{const w=t.clientWidth;if(!w)return;const n=t.children.length,i=Math.max(0,Math.min(n-1,Math.round(t.scrollLeft/w))),id=t.dataset.trk;if(id==='g'){if(view.gi!==i){view.gi=i;syncG(i)}}else{if(sl[id]!==i){sl[id]=i;const a=t.parentNode;a&&a.querySelectorAll('.dots i').forEach((d,j)=>d.classList.toggle('on',j===i))}}})},true);
 function touch(id){const ls=$('#ls');if(!ls)return;const m=P.find(g=>g.id===id);if(!m)return;[...ls.children].forEach(n=>{if(n.__k==='g'+id)n.__h=card(m);if(n.__k==='l'+id)n.__h=lrow(m)})}
 /* ---------- dados ---------- */
@@ -275,7 +290,7 @@ function theme(){let t='';try{t=localStorage.getItem('vt')||''}catch(e){}if(!t&&
 const eff=()=>document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
 const tgB=()=>on.theme?`<button class="ic" data-tg aria-label="Tema claro ou escuro">${eff()=='dark'?'☀':'☾'}</button>`:'';
 const tbtn=()=>$$('[data-tg]').forEach(b=>b.textContent=eff()=='dark'?'☀':'☾');
-function init(){cfg=D.cfg||{};cfg.cats=(Array.isArray(cfg.cats)?cfg.cats:[]).map(c=>c&&c.id==='apple'&&c.nome==='Apple'?{...c,nome:'iPhones'}:c);D.itens=Array.isArray(D.itens)?D.itens:[];if(cfg.gar===undefined)cfg.gar='Garantia Select · 6 meses a 1 ano';if(cfg.sub==='iPhones e cosméticos importados'||cfg.sub==='Loja 100% virtual')cfg.sub='Apple & Cosméticos';on={...DEF,...(cfg.rec||{})};document.title=cfg.nome+' | Vitrine';if(cfg.banner){$('#ann').textContent=cfg.banner;$('#ann').hidden=false}
+function init(){cfg=D.cfg||{};cfg.cats=(Array.isArray(cfg.cats)?cfg.cats:[]).map(c=>c&&c.id==='apple'&&c.nome==='Apple'?{...c,nome:'iPhones'}:c);D.itens=Array.isArray(D.itens)?D.itens:[];if(cfg.gar===undefined)cfg.gar='Garantia Select · 6 meses a 1 ano';if(cfg.sub==='iPhones e cosméticos importados'||cfg.sub==='Loja 100% virtual')cfg.sub='Apple & Cosméticos';on={...DEF,...(cfg.rec||{})};document.title=cfg.nome+' | Vitrine';{const g=$('#gh .gb');if(g&&!/^\s*(select\s*imports)?\s*$/i.test(cfg.nome||'')){g.querySelector('.wm').outerHTML='<b class="hn">'+X(nmShow())+'</b>'}}if(cfg.banner){$('#ann').textContent=cfg.banner;$('#ann').hidden=false}
 const dt=new Date(D.atualizado);
 $('#ft').innerHTML=X(cfg.nome)+(cfg.whats?' · Atendimento pelo WhatsApp '+fone(cfg.whats):'')+(cfg.insta?'<br>Instagram: <a href="https://instagram.com/'+encodeURIComponent(cfg.insta.replace('@',''))+'" target="_blank" rel="noopener" style="color:inherit">@'+X(cfg.insta.replace('@',''))+'</a>':'')+(cfg.horario?'<br>Horário: '+X(cfg.horario):'')+(isNaN(dt)?'':'<br>Atualizado em '+dt.toLocaleDateString('pt-BR'))+(cfg.rodape?(isNaN(dt)?'<br>':' · ')+X(cfg.rodape):'');
 $('#fab').href=wa('Olá! Vim pela vitrine da '+cfg.nome+'.');$('#fab').innerHTML=WA(30);theme();P=groups();
@@ -318,7 +333,7 @@ function mountProd(){$('#app').innerHTML=`<div class="pp" id="pd"><div style="di
 function updProd(){const m=cur(),x=sel(m),a=caps(m),vc=m.v.filter(y=>y.k===x.k&&y.col),ph=x.ph&&x.ph.length?x.ph:(x.co=='Seminovo'?[]:m.ph),gi=Math.min(view.gi||0,Math.max(ph.length-1,0)),esg=x.disp=='esgotado',zoom=on.gallery&&ph.length,
 fic=on.sheet?`<section class="b"><h2>Ficha do produto</h2><div class="row"><span>Categoria</span><span>${X(cname(m))}</span></div>${x.co?`<div class="row"><span>Condição</span><span>${X(x.co)}</span></div>`:''}${x.bat?`<div class="row"><span>Saúde da bateria</span><span>${X(x.bat)}%</span></div>`:''}${x.gar?`<div class="row"><span>Garantia</span><span style="text-align:right">${X(x.gar)}</span></div>`:''}<div class="row"><span>Disponibilidade</span><span>${DL[x.disp]}</span></div></section>`:'',
 solo=m.v.length>1&&m.v.every(y=>!y.k&&!y.col);
-setR(rg('ga'),`<div class="art" id="ga" style="margin:12px 0;${zoom?'cursor:zoom-in':''}"${zoom?' role="button" tabindex="0" aria-pressed="false" aria-label="Ampliar foto"':''}>${ph.length>1?`<div class="trk" data-trk="g">${ph.map((u,i)=>`<img ${i?'loading="lazy" ':''}alt="${X(m.n)} - foto ${i+1} de ${ph.length}" decoding="async" draggable="false" src="${X(u)}">`).join('')}</div><div class="dots" aria-hidden="true">${ph.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:ph.length?`<img alt="${X(m.n)}" decoding="async" src="${X(ph[0])}">`:phd(m)}</div>${on.gallery&&ph.length>1?`<div class="thm">${ph.map((u,i)=>`<img alt="Foto ${i+1} de ${ph.length}" role="button" tabindex="0" decoding="async" src="${X(u)}" data-th="${i}">`).join('')}</div>`:''}`);
+setR(rg('ga'),`<div class="art" id="ga" style="margin:12px 0;${zoom?'cursor:zoom-in':''}"${zoom?' role="button" tabindex="0" aria-pressed="false" aria-label="Ampliar foto"':''}>${ph.length>1?`<div class="trk" data-trk="g">${ph.map((u,i)=>`<img ${i?'loading="lazy" ':''}alt="${X(m.n)} - foto ${i+1} de ${ph.length}" decoding="async" draggable="false" src="${X(u)}">`).join('')}</div><div class="dots" aria-hidden="true">${ph.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div><button type="button" class="gn l" data-gn="-1" aria-label="Foto anterior">‹</button><button type="button" class="gn r" data-gn="1" aria-label="Próxima foto">›</button><span class="gc" aria-live="polite">${gi+1} / ${ph.length}</span>`:ph.length?`<img alt="${X(m.n)}" decoding="async" src="${X(ph[0])}">`:phd(m)}</div>${on.gallery&&ph.length>1?`<div class="thm">${ph.map((u,i)=>`<img alt="Foto ${i+1} de ${ph.length}" role="button" tabindex="0" decoding="async" src="${X(u)}" data-th="${i}">`).join('')}</div>`:''}`);
 {const tr=$('#ga .trk');if(tr){const w=tr.clientWidth;if(w&&Math.abs(tr.scrollLeft-gi*w)>2)tr.scrollTo({left:gi*w,behavior:'auto'});syncG(gi)}}
 setR(rg('ti'),`<h1 style="font-size:26px;letter-spacing:-.5px">${X(m.n)}</h1><div class="sm" style="margin:2px 0 6px">${X(x.d)}</div>${on.badges?`<div><span class="bd">${X(x.co||coTxt(m))}</span>${badges(m)}</div>`:''}`);
 setR(rg('cp'),on.pickvar&&a.length?`<span class="lb">Capacidade</span><div class="chips">${a.map(k=>`<button class="chip" data-cap="${k}" aria-pressed="false">${k}</button>`).join('')}</div>`:'');
@@ -334,7 +349,7 @@ $$('[data-vid]').forEach(b=>{const o=String(b.dataset.vid)===String(x.id);b.clas
 try{const u='?p='+encodeURIComponent(x.id);if(location.search!==u)history.replaceState(history.state,'',u)}catch(e){}}
 function bar(){let h='';if(view.n==='prod'){const m=cur(),x=sel(m);if(on.wa)h=waA(m,x,'btn',x.disp=='esgotado'?'Falar no WhatsApp':x.disp=='enc'?'Encomendar pelo WhatsApp':'Comprar pelo WhatsApp')}else{if(on.fav&&favs.size)h+=`<a class="btn" href="${wa('Olá! Tenho interesse nestes itens:\n'+[...favs].map(i=>{const m=P.find(g=>g.id===i);return '- '+m.n+(cfg.preco&&mp(m)>0?' (a partir de '+R(mp(m))+')':'')}).join('\n'))}" target="_blank" rel="noopener" data-tk="whatsapp">Lista (${favs.size}) no WhatsApp</a>`;if(on.compare&&cmp.size>1)h+=`<button class="btn sf" data-cp>Comparar (${cmp.size})</button>`}
 setR($('#bar'),h);document.body.classList.toggle('hb',!!h);$('#fab').hidden=!(on.floatwa&&view.n==='home')}
-function rr(){const a=$('#app'),home=view.n==='home',key=home?'home':'p:'+view.id;if(a.dataset.v!==key){a.dataset.v=key;home?mountHome():mountProd();if(!RM.matches){a.classList.remove('vin');void a.offsetWidth;a.classList.add('vin')}}
+function rr(){const a=$('#app'),home=view.n==='home';document.body.classList.toggle('np',!home);const key=home?'home':'p:'+view.id;if(a.dataset.v!==key){a.dataset.v=key;home?mountHome():mountProd();if(!RM.matches){a.classList.remove('vin');void a.offsetWidth;a.classList.add('vin')}}
 if(a.dataset.v!==key)return;if(home){sync();list()}else updProd();bar();tbtn()}
 /* ---------- janela (modal) ---------- */
 let lastF=null;
@@ -391,6 +406,7 @@ document.addEventListener('click',e=>{const t=e.target,d=s=>t.closest&&t.closest
 if(t===$('#ov')||d('[data-close]'))return close();
 const tk=d('[data-tk]');if(tk){const s=tk.dataset.tk,i=s.indexOf(':');track(i<0?s:s.slice(0,i),i<0?null:s.slice(i+1))}
 if(d('[data-trade]'))tw();
+if(d('[data-home]')){if(view.n==='prod'){if(history.state&&history.state.v)history.back();else goHome(true)}else scrollTo({top:0,behavior:smooth()});return}
 if(d('a'))return;
 if(d('[data-avs]'))return avForm(v('[data-avs]','data-avs'));if(d('[data-avok]'))return avSend(d('[data-avok]'));if(d('[data-retry]'))return load(true);
 if(d('[data-clr]')){q='';fl.cat='';fl.cond='';fl.price=0;fl.av=false;const i=$('#q');if(i)i.value='';sync();list();return}
@@ -411,6 +427,7 @@ if(d('[data-open]')){const [i,k]=v('[data-open]','data-open').split(':'),m=P.fin
 if(d('[data-cap]')){const k=v('[data-cap]','data-cap'),m=cur(),c=sel(m),s=m.v.find(x=>x.k===k&&x.col===c.col&&x.co===c.co)||m.v.find(x=>x.k===k&&x.col===c.col)||pickC(m.v.filter(x=>x.k===k));view.k=k;view.col=s.col;view.vid=s.id;view.gi=0;updProd();return bar()}
 if(d('[data-col]')){view.col=v('[data-col]','data-col');view.vid=null;view.gi=0;updProd();return bar()}
 if(d('[data-vid]')){view.vid=v('[data-vid]','data-vid');view.gi=0;updProd();return bar()}
+if(d('[data-gn]')){const tr=$('#ga .trk');if(!tr)return;const n=tr.children.length,j=((view.gi||0)+ +v('[data-gn]','data-gn')+n)%n;$('#ga').classList.remove('z');view.gi=j;tr.scrollTo({left:j*tr.clientWidth,behavior:smooth()});return syncG(j)}
 if(d('[data-th]')){const j=+v('[data-th]','data-th'),tr=$('#ga .trk');view.gi=j;if(tr)tr.scrollTo({left:j*tr.clientWidth,behavior:smooth()});return syncG(j)}
 if(d('#ga')&&on.gallery){const g=$('#ga');g.classList.toggle('z');return g.setAttribute('aria-pressed',g.classList.contains('z'))}
 if(d('[data-sg]')){q=v('[data-sg]','data-sg');const i=$('#q');if(i)i.value=q;return list()}
@@ -424,7 +441,8 @@ document.addEventListener('keydown',e=>{const o=$('#ov').classList.contains('on'
 if(o&&e.key==='Escape'){e.preventDefault();return close()}
 if(o&&e.key==='Tab'){const f=$$('#sh button,#sh a[href],#sh input,#sh select').filter(n=>!n.disabled),s=$('#sh');if(!f.length){e.preventDefault();return s.focus()}const a=f[0],z=f[f.length-1],ac=document.activeElement;if(e.shiftKey&&(ac===a||ac===s)){e.preventDefault();z.focus()}else if(!e.shiftKey&&ac===z){e.preventDefault();a.focus()}return}
 const r=e.target.closest&&e.target.closest('[role=button]');if(r&&r.tagName!=='BUTTON'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();return r.click()}
-if(e.key==='Enter'&&e.target.id==='q')e.target.blur()});
+if(e.key==='Enter'&&e.target.id==='q')e.target.blur();if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&view.n==='prod'&&!o&&!/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)){const b=$('#ga .gn.'+(e.key==='ArrowLeft'?'l':'r'));if(b){e.preventDefault();b.click()}}});
+document.addEventListener('mouseover',e=>{const th=e.target.closest&&e.target.closest('[data-th]');if(!th||!matchMedia('(hover:hover)').matches)return;const j=+th.dataset.th,tr=$('#ga .trk');if(!tr||view.gi===j)return;view.gi=j;tr.scrollTo({left:j*tr.clientWidth,behavior:'auto'});syncG(j)});
 /* foto que não carrega vira o ícone padrão (sem imagem quebrada) */
 addEventListener('error',e=>{const i=e.target;if(!i||i.tagName!=='IMG'||!i.closest('.art'))return;const c=i.closest('[data-id]'),m=c?P.find(g=>g.id===c.dataset.id):cur();if(m)i.outerHTML=i.closest('.mini')?ic(m.c,26):phd(m)},true);
 addEventListener('online',()=>{if(!D&&OK)load(true)});
