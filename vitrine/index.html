@@ -260,6 +260,19 @@ body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card)
 .art img,.trk>img{object-fit:contain}
 .art:has(>img),.art:has(.trk){background:#fff}
 .thm img{object-fit:contain;background:#fff}
+/* ===== página do produto no computador: a foto cabe inteira na tela e as miniaturas ficam na lateral (inspirado em marketplaces) ===== */
+@media (min-width:1024px){
+.pp{--gh:clamp(320px,calc(100vh - 262px),640px)}
+.pdc{grid-template-columns:max-content minmax(0,640px);justify-content:start;gap:44px}
+.pdl{top:80px}
+.pdl [data-r=ga]{display:flex;align-items:flex-start;gap:14px}
+.pdl #ga{flex:none;width:var(--gh);height:var(--gh);aspect-ratio:auto}
+.pdl .thm{order:-1;flex:none;flex-direction:column;flex-wrap:nowrap;gap:8px;padding:0;width:66px;max-height:var(--gh);overflow:hidden auto;scrollbar-width:none}
+.pdl .thm::-webkit-scrollbar{display:none}
+.pdl .thm img{width:64px;height:64px;flex:none}
+#ga.z{cursor:zoom-out!important}
+#ga.z img{transform:scale(2)}
+}
 </style></head><body class="np">
 <div class="ann" id="ann" hidden></div>
 <header class="gh" id="gh"><div class="ghi"><button type="button" class="gb" data-home aria-label="Ir para o início da vitrine"><img class="lg" src="../icons/icon-192.png" alt=""><i class="wm" role="img" aria-label="select imports"></i></button></div></header>
@@ -294,6 +307,13 @@ function recon(host,items){const old=new Map();[...host.children].forEach(n=>n._
 const need=items.filter(it=>{const n=old.get(it.k);return !(n&&n.__h===it.h)}),t=document.createElement('template');t.innerHTML=need.map(it=>it.h.trim()).join('');const fresh=new Map(),ch=t.content.children;need.forEach((it,i)=>fresh.set(it.k,ch[i]));
 let d=0;const nodes=items.map(it=>{let n=fresh.get(it.k);if(!n)return old.get(it.k);n.__k=it.k;n.__h=it.h;if(!old.has(it.k)&&!RM.matches&&d<14){n.classList.add('in');n.style.setProperty('--d',Math.min(d++,8)*22+'ms');n.addEventListener('animationend',()=>n.classList.remove('in'),{once:true})}return n});
 const keep=new Set(nodes);[...host.children].forEach(n=>keep.has(n)||n.remove());nodes.forEach((n,i)=>{if(host.children[i]!==n)host.insertBefore(n,host.children[i]||null)})}
+/* foto do produto no computador: altura calculada para caber entre o topo e a barra de compra */
+function fitG(){const pp=$('#pd');if(!pp)return;if(innerWidth<1024){pp.style.removeProperty('--gh');return}const c=$('.pdc');if(!c)return;const b=$('.bar'),top=c.getBoundingClientRect().top+scrollY,bh=(b&&b.offsetHeight)||0;pp.style.setProperty('--gh',Math.round(Math.max(320,Math.min(640,innerHeight-top-bh-16)))+'px')}
+{const _up=updProd;updProd=function(){const r=_up.apply(this,arguments);fitG();requestAnimationFrame(fitG);return r}}
+addEventListener('resize',()=>fitG());
+/* passar o mouse sobre a miniatura troca a foto; com a foto ampliada, ela acompanha o mouse */
+document.addEventListener('mouseover',e=>{const t=e.target.closest&&e.target.closest('[data-th]');if(!t||view.n!=='prod'||!matchMedia('(min-width:1024px) and (hover:hover)').matches)return;const j=+t.dataset.th;if((view.gi||0)===j)return;view.gi=j;const tr=$('#ga .trk');if(tr)tr.scrollTo({left:j*tr.clientWidth,behavior:'auto'});syncG(j)});
+document.addEventListener('mousemove',e=>{const g=e.target.closest&&e.target.closest('#ga.z');if(!g)return;const r=g.getBoundingClientRect(),o=((e.clientX-r.left)/r.width*100).toFixed(1)+'% '+((e.clientY-r.top)/r.height*100).toFixed(1)+'%';g.querySelectorAll('img').forEach(i=>{i.style.transformOrigin=o})},{passive:true});
 /* galeria por deslizar: mantém pontinhos, miniaturas e índice em sincronia com a rolagem */
 function syncG(i){$$('#pd .thm img').forEach((n,j)=>{n.classList.toggle('on',j===i);if(j===i&&n.scrollIntoView)try{n.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'})}catch(e){}});$$('#ga .dots i').forEach((n,j)=>n.classList.toggle('on',j===i));{const c=$('#ga .gc'),tr=$('#ga .trk');if(c&&tr)c.textContent=(i+1)+' / '+tr.children.length}}
 let rafT=0;addEventListener('scroll',e=>{const t=e.target;if(!t||!t.classList||!t.classList.contains('trk'))return;cancelAnimationFrame(rafT);rafT=requestAnimationFrame(()=>{const w=t.clientWidth;if(!w)return;const n=t.children.length,i=Math.max(0,Math.min(n-1,Math.round(t.scrollLeft/w))),id=t.dataset.trk;if(id==='g'){if(view.gi!==i){view.gi=i;syncG(i)}}else{if(sl[id]!==i){sl[id]=i;const a=t.parentNode;a&&a.querySelectorAll('.dots i').forEach((d,j)=>d.classList.toggle('on',j===i))}}})},true);
