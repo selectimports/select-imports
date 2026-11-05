@@ -362,6 +362,14 @@ main.pg .bars i{animation:grow .5s var(--ease) both}
 #rec .rm-hd small{color:#E3D0E5;display:block}#rec .rm.light .rm-hd small{color:#5F4E70}
 /* logotipo igual no app e na vitrine: ícone 44px + logotipo 40px */
 .hl{height:44px;width:44px;border-radius:12px}.brand{gap:12px}.brand .wm,.sb-brand .wm{height:40px}.sb-brand{gap:12px}
+
+/* ===== COMPUTADOR: aproveita melhor a largura da tela (celular não muda) ===== */
+@media(min-width:1200px){
+  main{max-width:1120px;padding:32px 40px 72px}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .tabs{flex-wrap:wrap}
+}
+@media(min-width:1600px){main{max-width:1360px}}
 </style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><meta name="theme-color" content="#48336C"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Select Imports"><meta name="apple-mobile-web-app-status-bar-style" content="default"><script>if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script><script src="supabase-shim.js"></script></head><body><div id="app"></div>
 <script>
 const $=s=>document.querySelector(s),E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),R=n=>window.__hv?'R$ •••••':(+n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),U=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5),T=()=>new Date().toISOString().slice(0,10),V=i=>($('#'+i)||{}).value||'',N=i=>parseFloat(String(V(i)).replace(',','.'))||0;
