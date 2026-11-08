@@ -530,6 +530,52 @@ main.pg{animation:pgin .24s ease both}@keyframes pgin{from{opacity:0;transform:t
 .lbfb{display:grid;grid-template-columns:auto 1fr;gap:8px;margin-top:8px}
 .lbfb .b,.lbfb .g2{margin:0;min-width:0;width:100%}
 .lbfb .g2{padding-inline:16px}
+/* ===== cadastro em lote: folha em coluna (rolagem só no miolo, rodapé fixo, sem sticky) ===== */
+.mb.lbsheet{display:flex;flex-direction:column;padding:0;overflow:hidden;max-height:92vh;animation:lbsheet .24s var(--ease)}
+@supports(height:1dvh){.mb.lbsheet{max-height:92dvh}}
+@keyframes lbsheet{from{transform:translateY(28px)}to{transform:none}}
+.lbsheet .lbsc{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:20px var(--lbp,16px) 12px;scroll-padding-bottom:24px}
+.lbsheet .lbti{display:block;margin:0;font-size:17px}
+.lbsheet .lbsub{display:block;margin:2px 0 10px;color:var(--tx2)}
+.mb.lbsheet .lbf{position:static;flex:none;margin:0;padding:12px var(--lbp,16px) calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 16px -12px rgba(14,8,28,.4)}
+.lbim{display:none}
+.lbr[data-t=iphone] .lbim{display:block}
+.lbim .lbg2{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)}
+.lbsg{margin:2px 0 8px;border:1px solid var(--bd-s);border-radius:var(--r-m);background:var(--surf);overflow:hidden;animation:lbin .16s var(--ease)}
+.lbsg[hidden]{display:none}
+.lbsi{display:block;width:100%;min-height:48px;padding:9px 12px;margin:0;border:0;border-bottom:1px solid var(--bd);border-radius:0;background:none;color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.lbsi:last-child{border-bottom:0}
+.lbsi:active,.lbsi:hover{background:var(--surf3)}
+.lbsi b{display:block;font-size:15px;line-height:1.3;overflow-wrap:anywhere}
+.lbsi small{display:block;margin-top:2px;color:var(--tx2);font-size:12.5px}
+.lbsi mark{background:var(--ring);color:inherit;border-radius:3px;padding:0 1px}
+
+@media(max-width:340px){.lbim .lbg2{grid-template-columns:1fr}}
+.lbr[data-t=iphone]:not([data-ox]) .lbcz{display:none}
+.lbr .lbd{margin-top:4px}
+.mb,#md{overscroll-behavior:contain}
+.mb{-webkit-overflow-scrolling:touch}
+@supports(height:1dvh){.mb{max-height:92dvh}}
+html.mo,html.mo body{overflow:hidden}
+/* ===== lotes de compra: cada lote em um bloco legível ===== */
+.lotin{margin:6px 0 2px;color:var(--tx2);font-size:13.5px;line-height:1.5}
+.lot{margin:12px 0;padding:14px;background:var(--surf2);border:1px solid var(--bd);border-radius:var(--r-l)}
+.loth{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.loth b{font-size:16px;line-height:1.3;overflow-wrap:anywhere}
+.lotd{flex:none;font-size:12.5px;color:var(--tx3)}
+.lotg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 0}
+.lotg>div{min-width:0;padding:8px 10px;background:var(--surf);border:1px solid var(--bd);border-radius:10px}
+.lotg dt{margin:0 0 2px;font-size:11.5px;color:var(--tx2)}
+.lotg dd{margin:0;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(min-width:520px){.lotg{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.lota{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px}
+.lota .b,.lota .g2{margin:0;min-width:0}
+.lotem{margin:12px 0;color:var(--tx2)}
+.lotsh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.lotsh b{font-size:15px;overflow-wrap:anywhere}
+.lotsu{flex:none;font-weight:700}
+.lotsp{margin:4px 0 0;color:var(--tx2);font-size:13px;line-height:1.7}
+
 .prcg{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
 .prct .g2{margin:8px 0}
 .prh2{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
@@ -558,7 +604,7 @@ function load(j){try{const o=JSON.parse(j);S=Object.assign(S,o);S.cfg=Object.ass
 function save(){clearTimeout(tm);tm=setTimeout(async()=>{const j=JSON.stringify(S);lastJ=j;try{localStorage.setItem('si',j)}catch(e){}try{ref&&await ref.set({j})}catch(e){}},300)}
 try{const j=localStorage.getItem('si');if(j){lastJ=j;load(j)}}catch(e){}
 (async()=>{try{const db=await claude.use('db');if(!db)return;ref=db.doc('loja/dados');ref.onSnapshot(s=>{if(s.metadata.hasPendingWrites)return;const d=s.exists&&s.data();window.__lastSync=Date.now();const first=window.__loaded===false;window.__loaded=true;if(d&&d.j){if(d.j!==lastJ){lastJ=d.j;load(d.j);const a=document.activeElement;if($('#md')&&$('#md').style.display=='flex')return;if(!a||a.tagName!='INPUT')go()}else if(first)go()}else{save();if(first)go()}})}catch(e){}})();
-function md(h){let m=$('#md');if(!m){m=document.createElement('div');m.id='md';document.body.appendChild(m)}m.innerHTML=h?`<div class=mb>${h}</div>`:'';m.style.display=h?'flex':'none'}
+function md(h){let m=$('#md');if(!m){m=document.createElement('div');m.id='md';document.body.appendChild(m)}m.innerHTML=h?`<div class=mb>${h}</div>`:'';m.style.display=h?'flex':'none';document.documentElement.classList.toggle('mo',!!h)}
 const msg=t=>md(`<p>${t}</p><button class=b onclick=md()>OK</button>`);
 function ask(t,f){window._f=f;md(`<p>${t}</p><div class=row><button class="b${/apag|exclu|cancel|remov|descart|substitu|restaur/i.test(t)?' dg':''}" onclick="md();_f()">Sim</button><button class=g2 onclick=md()>Não</button></div>`)}
 function auth(){let ok=0;try{ok=localStorage.getItem('siok')=='1'}catch(e){}if(ok)return go();$('#app').innerHTML=`<div class=lg><h1><i class=wm role=img aria-label="select imports"></i></h1><p class=mu>Digite a senha para entrar</p><input id=pw type=password><button class=b onclick=ent()>Entrar</button><p id=er class=no></p></div>`}
@@ -828,7 +874,7 @@ const lotIn=(k,p)=>!k.sc||k.sc=='all'||(Array.isArray(k.sc)&&k.sc.includes(p.grp
 const lotPs=id=>S.prod.filter(p=>p.lote==id);
 const lotUn=(id,sc)=>lotPs(id).filter(p=>lotIn({sc},p)).reduce((x,p)=>x+Math.max(0,p.q|0),0);
 const lotScL=(l,sc)=>(!sc||sc=='all')?'todo o lote':lotGs(l).filter(g=>sc.includes(g.id)).map(g=>g.n).join(' + ')||'—';
-function lotCard(){const L=S.lotes||[];return `<details class="card dt"><summary>Lotes de compra (vários fornecedores, custos divididos)</summary><small style="display:block;margin:6px 0">Para pedidos com vários produtos: crie o lote com os fornecedores, cadastre cada produto escolhendo o fornecedor e depois lance o frete. Cada custo vale para o lote todo ou só para os fornecedores que você escolher, e é dividido por igual entre as unidades.</small>${L.slice().reverse().map(l=>{const ex=(l.cs||[]).reduce((x,k)=>x+k.v,0);return `<div class=it><span><b>${E(l.n)}</b><br><small>${lotGs(l).length} fornecedor${lotGs(l).length==1?'':'es'} · ${lotPs(l.id).length} produto${lotPs(l.id).length==1?'':'s'} · ${lotUn(l.id)} un. em estoque · custos ${R(ex)}</small></span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class=b style="width:auto" onclick="lotBM('${l.id}')">Adicionar produtos</button><button class=g2 style="width:auto" onclick="lotM('${l.id}')">Fretes e custos</button></div></div>`}).join('')||'<small>Nenhum lote ainda.</small>'}<button class=b onclick=lotNew()>Novo lote</button></details>`}
+function lotCard(){const L=S.lotes||[],pl=(n,a,b)=>n+' '+(n==1?a:b);return `<details class="card dt"><summary>Lotes de compra</summary><p class=lotin>Para pedidos com vários produtos: crie o lote com os fornecedores, cadastre cada produto escolhendo o fornecedor e depois lance o frete. Cada custo vale para o lote todo ou só para os fornecedores escolhidos e é dividido por igual entre as unidades.</p>${L.slice().reverse().map(l=>{const ex=(l.cs||[]).reduce((x,k)=>x+k.v,0),ng=lotGs(l).length,np=lotPs(l.id).length;return `<article class=lot><div class=loth><b>${E(l.n)}</b>${l.d?`<span class=lotd>${dmy(l.d)}</span>`:''}</div><dl class=lotg><div><dt>Fornecedores</dt><dd>${ng}</dd></div><div><dt>Produtos</dt><dd>${np}</dd></div><div><dt>Em estoque</dt><dd>${lotUn(l.id)} un.</dd></div><div><dt>Custos</dt><dd>${R(ex)}</dd></div></dl><div class=lota><button class=b onclick="lotBM('${l.id}')">Adicionar produtos</button><button class=g2 onclick="lotM('${l.id}')">Fretes e custos</button></div></article>`}).join('')||'<p class=lotem>Nenhum lote ainda. Crie o primeiro para dividir frete e taxas entre os produtos.</p>'}<button class=b onclick=lotNew()>Novo lote</button></details>`}
 const lotTxO=v=>{v=+v||0;const o=['<option value="">Sem taxa</option>'];for(let i=1;i<=10;i++)o.push(`<option value="${i}"${v==i?' selected':''}>${i}%</option>`);if(v>0&&(v>10||v%1))o.push(`<option value="${v}" selected>${String(v).replace('.',',')}% (atual)</option>`);return o.join('')};
 const lotCfH=(p,id,c,f)=>`<label for="${p}c_${id}">Cidade do fornecedor</label><select id="${p}c_${id}" onchange="lotCfCh('${p}','${id}')"><option value="PJC"${c=='CDE'?'':' selected'}>Pedro Juan Caballero (PJC)</option><option value="CDE"${c=='CDE'?' selected':''}>Ciudad del Este (CDE)</option></select><div id="${p}fw_${id}" style="display:${c=='CDE'?'block':'none'}"><label for="${p}f_${id}">Frete para outra cidade (CDE → PJC)</label><select id="${p}f_${id}"><option value="1"${f?' selected':''}>Com frete</option><option value="0"${f?'':' selected'}>Sem frete</option></select></div>`;
 function lotCfCh(p,id){const c=document.getElementById(p+'c_'+id),w=document.getElementById(p+'fw_'+id);if(c&&w)w.style.display=c.value=='CDE'?'block':'none'}
@@ -849,7 +895,7 @@ const brk=p=>{const ks=p.custos||[],fee=ks.filter(k=>k.lid=='tx').reduce((x,k)=>
 const gsum=g=>{const pp=ps.filter(p=>(p.grp||'g0')==g.id),q=pp.reduce((x,p)=>x+Math.max(0,p.q|0),0);let b=0,fe=0,fr=0,tot=0;pp.forEach(p=>{const z=brk(p),n=Math.max(0,p.q|0);b+=(z.base+z.ex)*n;fe+=z.fee*n;fr+=z.fr*n;tot+=(+p.c||0)*n});return {pp,q,b,fe,fr,tot}};
 md(`<b>Lote: ${E(l.n)}</b><small style="display:block;margin-bottom:8px">${gs.length} fornecedor${gs.length==1?'':'es'} · ${ps.length} produto${ps.length==1?'':'s'} · ${un} unidade${un==1?'':'s'} em estoque</small><button class=b onclick="lotBM('${id}')">Adicionar vários produtos de uma vez</button>${ps.some(p=>p.tr)?`<button class=g2 onclick="lotChegou('${id}')">Marcar tudo do lote como chegou</button>`:''}${prcList('L:'+id).length?`<button class=g2 onclick="prcM('L:${id}','${id}')">Definir preço de venda (${prcList('L:'+id).length} sem preço)</button>`:''}
 <div class=card><div class=it><span>Custos rateados até agora</span><b>${R(ex)}</b></div>${pv?`<div class=it><span>Custos previstos (frete etc.)</span><b>${R(pv)}</b></div><div class=it><span>${f<-0.004?'Acima do previsto':'Falta pagar'}</span><b class=${Math.abs(f)>0.004?'no':'ok'}>${f<-0.004?'+'+R(-f):f>0.004?R(f):'Tudo pago ✓'}</b></div><div class=cubar role=img aria-label="${Math.min(100,Math.round(ex/pv*100))}% do previsto já pago"><i style="width:${Math.min(100,ex/pv*100)}%"></i></div>`:'<small>Informe o total previsto de frete e custos lá embaixo para ver quanto ainda falta pagar.</small>'}</div>
-<b style="display:block;margin:12px 0 4px">Fornecedores</b>${gs.map(g=>{const s=gsum(g);return `<div class=card><div class=it><span><b>${E(g.n)}</b><br><small>${s.pp.length} produto${s.pp.length==1?'':'s'} · ${s.q} un. em estoque${g.cid?`<span class=lst2>${g.cid}</span>`:''}${g.fr?'<span class=lst2>frete CDE → PJC</span>':''}</small></span><b>${s.q?R(s.tot/s.q)+'/un.':'—'}</b></div><small style="display:block">Compra ${R(s.b)} · taxa ${R(s.fe)} · frete dividido ${R(s.fr)} · custo total ${R(s.tot)}</small><div style="margin-top:6px"><label for="lgt_${g.id}">Taxa do fornecedor</label><select id="lgt_${g.id}">${lotTxO(g.tx)}</select>${lotCfH('lg',g.id,g.cid,g.cid=='CDE'&&!g.fr?0:1)}<div class=row style="margin-top:6px"><button class=b style="margin:0" onclick="window.__lotGrp='${g.id}';lotBM('${id}')">Adicionar produtos</button><button class=g2 style="margin:0" onclick="lotGTx('${id}','${g.id}')">Salvar</button></div></div></div>`}).join('')}
+<b style="display:block;margin:12px 0 4px">Fornecedores</b>${gs.map(g=>{const s=gsum(g);return `<div class=card><div class=lotsh><b>${E(g.n)}</b><span class=lotsu>${s.q?R(s.tot/s.q)+'/un.':'—'}</span></div><p class=lotsp>${s.pp.length} produto${s.pp.length==1?'':'s'} · ${s.q} un. em estoque${g.cid?`<span class=lst2>${g.cid}</span>`:''}${g.fr?'<span class=lst2>frete CDE → PJC</span>':''}</p><dl class=lotg><div><dt>Compra</dt><dd>${R(s.b)}</dd></div><div><dt>Taxa</dt><dd>${R(s.fe)}</dd></div><div><dt>Frete dividido</dt><dd>${R(s.fr)}</dd></div><div><dt>Custo total</dt><dd>${R(s.tot)}</dd></div></dl><div style="margin-top:6px"><label for="lgt_${g.id}">Taxa do fornecedor</label><select id="lgt_${g.id}">${lotTxO(g.tx)}</select>${lotCfH('lg',g.id,g.cid,g.cid=='CDE'&&!g.fr?0:1)}<div class=row style="margin-top:6px"><button class=b style="margin:0" onclick="window.__lotGrp='${g.id}';lotBM('${id}')">Adicionar produtos</button><button class=g2 style="margin:0" onclick="lotGTx('${id}','${g.id}')">Salvar</button></div></div></div>`}).join('')}
 ${lotGAddH(l)}
 <b style="display:block;margin:12px 0 4px">Histórico de custos do lote</b>${cs.map(k=>`<div class=it><span>${E(k.t)}${k.s?' · '+E(k.s):''}<br><small>${dmy(k.d)} · ${k.w=='s'?'saiu do saldo':'não mexeu no saldo'}<br>Para: ${E(lotScL(l,k.sc))} · ${k.N} un. · +${R(k.u)} por unidade</small></span><b>${R(k.v)}</b><button class=x aria-label="Remover este custo do lote" onclick="lotDel('${id}','${k.id}')">🗑</button></div>`).join('')||'<small>Nenhum custo lançado ainda.</small>'}
 <div class=card style="margin-top:12px"><b>Lançar frete ou custo</b>
@@ -888,79 +934,119 @@ const mny=s=>{s=String(s||'').replace(/R\$|\s/g,'');if(!s)return 0;if(s.includes
 let lbK=0;
 const lbRM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lbMoney=n=>(Math.round((+n||0)*100)/100).toFixed(2).replace('.',',');
-const lbPrev=n=>{const k=nz(n).trim();return k?[...S.prod].reverse().find(p=>nz(p.n).trim()==k):null};
+const lbIx=()=>{if(window.__lbIx)return window.__lbIx;const a=new Map(),b=new Map();S.prod.forEach(p=>{const k=nz(p.n).trim();if(!k)return;a.set(k,p);b.set(k+'|'+nz(p.d).trim(),p)});return window.__lbIx={a,b}};
+const lbPrev=(n,d,ex)=>{const k=nz(n).trim();if(!k)return null;const ix=lbIx();if(d!=null&&String(d).trim()){const e=ix.b.get(k+'|'+nz(d).trim());if(e)return e}return ex?null:(ix.a.get(k)||null)};
+let lbRq=0;const lbSumQ=()=>{if(lbRq)return;lbRq=requestAnimationFrame(()=>{lbRq=0;lbSum()})};
+const lbOpt=(a,v,ph)=>'<option value="">'+ph+'</option>'+a.map(x=>'<option'+(x==v?' selected':'')+'>'+E(x)+'</option>').join('');
+function lbIpO(mi){let g='',h='<option value="">Escolha o modelo…</option>';IPH.forEach((m,i)=>{if(m[0]!==g){if(g)h+='</optgroup>';g=m[0];h+='<optgroup label="Linha iPhone '+g+'">'}h+='<option value="'+i+'"'+(String(mi)===String(i)?' selected':'')+'>'+E(m[1])+'</option>'});return h+'</optgroup><option value="x"'+(mi==='x'?' selected':'')+'>Outro modelo (digitar)</option>'}
+function lbNm(r){const ip=r.dataset.t=='iphone',m=ip?IPH[r.querySelector('.lbmd').value]:null;if(m)return {n:m[1],d:[r.querySelector('.lbgb').value,r.querySelector('.lbcr').value].filter(Boolean).join(' ')};return {n:r.querySelector('.lbn').value.trim(),d:r.querySelector('.lbd').value.trim()}}
+function lbIpParse(s){const t=nz(s).trim();let b=-1,L=0;IPH.forEach((m,i)=>{const k=m[1].toLowerCase();if(t.startsWith(k)&&(t.length==k.length||!/[a-z0-9]/.test(t[k.length]))&&k.length>L){b=i;L=k.length}});if(b<0)return null;const m=IPH[b],rest=t.slice(L),sp=rest.replace(/\s+/g,'');return {mi:String(b),g:m[2].find(x=>sp.includes(x.toLowerCase()))||'',cr:m[3].find(x=>rest.includes(nz(x)))||''}}
 const lbTx=()=>{const l=(S.lotes||[]).find(x=>x.id==(window.__lbCtx||{}).lid);if(!l)return 0;const g=lotGs(l).find(x=>x.id==V('lbg'));return g?(+g.tx||0):0};
-const lbDl=()=>{const s=new Set(S.prod.map(p=>p.n).filter(Boolean));if(typeof IPH!='undefined')IPH.forEach(m=>m[2].forEach(g=>s.add(m[1]+' '+g)));return [...s].slice(0,600).map(n=>`<option value="${E(n)}">`).join('')};
+const lbDl=()=>{const s=new Set(S.prod.filter(p=>p.t!='iphone').map(p=>p.n).filter(Boolean));return [...s].slice(0,300).map(n=>`<option value="${E(n)}">`).join('')};
 function lbFlash(el){if(!el)return;el.classList.remove('lbfl');void el.offsetWidth;el.classList.add('lbfl')}
 function lbTween(el,to){if(!el)return;const from=+el.dataset.v||0;el.dataset.v=to;cancelAnimationFrame(el._r);if(from===to||lbRM()||window.__hv){el.textContent=R(to);return}const t0=performance.now(),f=t=>{const k=Math.min(1,(t-t0)/260),e=1-Math.pow(1-k,3);el.textContent=R(from+(to-from)*e);if(k<1)el._r=requestAnimationFrame(f)};el._r=requestAnimationFrame(f)}
-function lbRowH(d){d=d||{};const k=++lbK,t=d.t||'cosm',ip=t=='iphone';
-return `<div class=lbr data-k="${k}" data-t="${E(t)}"${d.m?' data-m=1':''}${d.cm?' data-cm=1':''}>
+function lbRowH(d){d=d||{};const k=++lbK,t=d.t||'cosm',ip=t=='iphone',mi=ip&&d.mi!=null&&d.mi!==''?String(d.mi):'',m=IPH[mi],ox=ip&&mi=='x';
+return `<div class=lbr data-k="${k}" data-t="${E(t)}"${ox?' data-ox=1':''}${d.m?' data-m=1':''}${d.cm?' data-cm=1':''}>
 <div class=lbrh><b class=lbrt>Produto</b><div class=lbseg role=group aria-label="Tipo do produto"><button type=button data-v=iphone class="${ip?'on':''}" aria-pressed="${ip}" onclick="lbType(this,'iphone')">iPhone</button><button type=button data-v=cosm class="${ip?'':'on'}" aria-pressed="${!ip}" onclick="lbType(this,'cosm')">Outro</button></div><button type=button class=x aria-label="Remover este produto" onclick="lbDel(this)">${ic('trash')}</button></div>
-<div class=lbl2><label for="lbn${k}">Nome do produto</label><span class=lbtg></span></div>
-<input id="lbn${k}" class=lbn list=lbdl autocomplete=off autocapitalize=sentences placeholder="Ex.: Medicube Zero Pore Pad" value="${E(d.n||'')}" oninput="lbName(this)" onchange="lbPick(this)" onkeydown="lbKey(event,this,'c')">
+<div class=lbim>
+<div class=lbl2><label for="lbm${k}">Modelo</label><span class=lbtg></span></div>
+<select id="lbm${k}" class=lbmd onchange="lbIpM(this)">${lbIpO(mi)}</select>
 <div class=lbg2>
-<div><label for="lbc${k}">Custo unitário</label><span class=lbm><input id="lbc${k}" class=lbc inputmode=decimal autocomplete=off placeholder="0,00" value="${E(d.c||'')}" oninput="lbSum()" onkeydown="lbKey(event,this,'q')"></span><button type=button class=lbhint hidden onclick="lbUse(this)"></button></div>
-<div><label for="lbq${k}">Quantidade</label><div class=lbst><button type=button aria-label="Diminuir quantidade" onclick="lbQ(this,-1)">&minus;</button><input id="lbq${k}" class=lbq inputmode=numeric autocomplete=off value="${E(d.q||1)}" oninput="lbSum()" onkeydown="lbKey(event,this,'add')"><button type=button aria-label="Aumentar quantidade" onclick="lbQ(this,1)">+</button></div></div>
+<div><label for="lbgb${k}">Capacidade</label><select id="lbgb${k}" class=lbgb onchange="lbIpS(this)"${m?'':' disabled'}>${m?lbOpt(m[2],d.g,'Escolha…'):'<option value="">—</option>'}</select></div>
+<div><label for="lbcr${k}">Cor</label><select id="lbcr${k}" class=lbcr onchange="lbIpS(this)"${m?'':' disabled'}>${m?lbOpt(m[3],d.cr,'Escolha…'):'<option value="">—</option>'}</select></div>
+</div>
+</div>
+<div class=lbcz>
+<div class=lbl2><label for="lbn${k}">Nome do produto</label><span class=lbtg></span></div>
+<input id="lbn${k}" class=lbn autocomplete=off autocapitalize=sentences placeholder="Ex.: Medicube Zero Pore Pad" value="${E(d.n||'')}" oninput="lbName(this)" onfocus="lbSug(this)" onblur="setTimeout(()=>lbSugHide(this.closest('.lbr')),160)" onchange="lbPick(this)" onkeydown="lbKey(event,this,'d')">
+<div class=lbsg hidden role=listbox aria-label="Produtos já cadastrados" onmousedown="event.preventDefault()"></div>
+<label for="lbd${k}">Características <span class=lbop>(opcional)</span></label>
+<input id="lbd${k}" class=lbd autocomplete=off autocapitalize=sentences placeholder="Ex.: 150 ml · tom 21 · kit com 3" value="${E(d.d||'')}" oninput="this.dataset.auto='';lbRef(this.closest('.lbr'))" onchange="lbPick(this)" onkeydown="lbKey(event,this,'c')">
+</div>
+<div class=lbg2>
+<div><label for="lbc${k}">Custo unitário</label><span class=lbm><input id="lbc${k}" class=lbc inputmode=decimal autocomplete=off placeholder="0,00" value="${E(d.c||'')}" oninput="this.dataset.auto='';lbSumQ()" onkeydown="lbKey(event,this,'q')"></span><button type=button class=lbhint hidden onclick="lbUse(this)"></button></div>
+<div><label for="lbq${k}">Quantidade</label><div class=lbst><button type=button aria-label="Diminuir quantidade" onclick="lbQ(this,-1)">&minus;</button><input id="lbq${k}" class=lbq inputmode=numeric autocomplete=off value="${E(d.q||1)}" oninput="lbSumQ()" onkeydown="lbKey(event,this,'add')"><button type=button aria-label="Aumentar quantidade" onclick="lbQ(this,1)">+</button></div></div>
 </div>
 <div class=lbip><label for="lbi${k}">IMEI ou serial <span class=lbop>(opcional)</span></label><textarea id="lbi${k}" class=lbi rows=2 placeholder="Um por linha ou separados por vírgula" oninput="lbIm(this)">${E(d.im||'')}</textarea><small class=lbimh></small><label for="lbo${k}">Condição</label><select id="lbo${k}" class=lbo onchange="this.closest('.lbr').dataset.cm=1"><option${d.co=='Seminovo'?'':' selected'}>Novo</option><option${d.co=='Seminovo'?' selected':''}>Seminovo</option></select></div>
-<div class=lbpr><label for="lbv${k}">Preço de venda unitário <span class=lbop>(opcional)</span></label><span class=lbm><input id="lbv${k}" class=lbv inputmode=decimal autocomplete=off placeholder="0,00" value="${E(d.pr||'')}"></span></div>
+<div class=lbpr><label for="lbv${k}">Preço de venda unitário <span class=lbop>(opcional)</span></label><span class=lbm><input id="lbv${k}" class=lbv inputmode=decimal autocomplete=off placeholder="0,00" value="${E(d.pr||'')}" oninput="this.dataset.auto=''"></span></div>
 <div class=lbe role=alert></div>
 <div class=lbsb><span>Subtotal</span><b class=lbs>—</b></div></div>`}
 function lbSeg(id,lab,opts,val){return `<div class="lbseg full" role=radiogroup aria-labelledby="${lab}">${opts.map(o=>`<button type=button role=radio data-v="${o[0]}" class="${o[0]==val?'on':''}" aria-checked="${o[0]==val}" onclick="lbSegSet(this,'${id}')">${o[1]}</button>`).join('')}</div><input type=hidden id="${id}" value="${val}">`}
 function lbSegSet(b,id){b.parentNode.querySelectorAll('button').forEach(x=>{const on=x==b;x.classList.toggle('on',on);x.setAttribute('aria-checked',on)});$('#'+id).value=b.dataset.v;if(id=='lbr')lbArr();lbSum()}
 function lbSetT(r,t){r.dataset.t=t;const ip=t=='iphone';r.querySelectorAll('.lbseg button').forEach(b=>{const on=(b.dataset.v=='iphone')==ip;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
-function lbTag(r,p,v){const g=r.querySelector('.lbtg');if(!g)return;g.innerHTML=!String(v||'').trim()?'':p?`<span class="pill p-ok">No estoque${(p.q|0)>0?' · '+(p.q|0)+' un.':''}</span>`:'<span class=pill>Produto novo</span>'}
+function lbTag(r,p,v){const has=!!String(v||'').trim(),h=!has?'':p?`<span class="pill p-ok">No estoque${(p.q|0)>0?' · '+(p.q|0)+' un.':''}</span>`:'<span class=pill>Produto novo</span>',a=r.querySelector('.lbim .lbtg'),b=r.querySelector('.lbcz .lbtg'),ipv=r.dataset.t=='iphone'&&!r.dataset.ox;if(a)a.innerHTML=ipv?h:'';if(b)b.innerHTML=ipv?'':h}
 function lbHint(r,p){const h=r.querySelector('.lbhint');if(!h)return;const b=p?cuBase(p):0;if(!(b>0)){h.dataset.v='';h.hidden=true;return}h.dataset.v=lbMoney(b);h.textContent='Última compra: '+R(b)+' · usar'}
-function lbInit(r){const n=r.querySelector('.lbn'),p=lbPrev(n.value);lbTag(r,p,n.value);lbHint(r,p);const i=r.querySelector('.lbi');if(i.value.trim())lbIm(i)}
-function lbName(inp){const r=inp.closest('.lbr'),v=inp.value,p=lbPrev(v);if(!r.dataset.m)lbSetT(r,/iphone/i.test(v)?'iphone':(p&&p.t)||'cosm');lbTag(r,p,v);lbHint(r,p);lbSum()}
-function lbPick(inp){const r=inp.closest('.lbr'),p=lbPrev(inp.value);if(!p)return;if(!r.dataset.m)lbSetT(r,p.t||'cosm');const c=r.querySelector('.lbc'),b=cuBase(p);if(c&&!c.value.trim()&&b>0){c.value=lbMoney(b);lbFlash(c)}if(p.t=='iphone'&&!r.dataset.cm&&p.co)r.querySelector('.lbo').value=p.co;const v=r.querySelector('.lbv');if(v&&!v.value.trim()&&+p.pr>0)v.value=lbMoney(p.pr);lbHint(r,p);lbSum()}
-function lbUse(b){const r=b.closest('.lbr'),c=r.querySelector('.lbc');c.value=b.dataset.v;lbFlash(c);lbSum()}
-function lbType(b,t){const r=b.closest('.lbr');r.dataset.m=1;if(t=='iphone')lbSetT(r,'iphone');else{const p=lbPrev(r.querySelector('.lbn').value);lbSetT(r,p&&p.t!='iphone'?p.t:'cosm')}lbSum()}
+function lbRef(r,ns){const nm=lbNm(r),ip=r.dataset.t=='iphone',p=lbPrev(nm.n,nm.d,ip);lbTag(r,p,ip?(nm.n&&nm.d):nm.n);lbHint(r,p);if(!ns)lbSum()}
+function lbInit(r){lbRef(r,1);const i=r.querySelector('.lbi');if(i.value.trim())lbIm(i)}
+function lbName(inp){const r=inp.closest('.lbr');lbSug(inp);if(r.dataset.t!='iphone'){const p=lbPrev(inp.value,r.querySelector('.lbd').value);lbSetT(r,(p&&p.t&&p.t!='iphone')?p.t:'cosm')}lbRef(r)}
+function lbFill(r){const ip=r.dataset.t=='iphone',d=r.querySelector('.lbd');let nm=lbNm(r),p=lbPrev(nm.n,nm.d,ip);
+if(!ip&&d){if(p&&(!d.value.trim()||d.dataset.auto=='1')&&(p.d||'')!==d.value){d.value=p.d||'';d.dataset.auto=d.value?'1':'';nm=lbNm(r);p=lbPrev(nm.n,nm.d,ip)||p}else if(!p&&d.dataset.auto=='1'){d.value='';d.dataset.auto=''}}
+const c=r.querySelector('.lbc'),v=r.querySelector('.lbv');
+if(!p){[c,v].forEach(e=>{if(e&&e.dataset.auto=='1'){e.value='';e.dataset.auto=''}})}
+else{const b=cuBase(p);if(c&&b>0&&(!c.value.trim()||c.dataset.auto=='1')){c.value=lbMoney(b);c.dataset.auto='1';lbFlash(c)}if(ip&&p.t=='iphone'&&!r.dataset.cm&&p.co)r.querySelector('.lbo').value=p.co;if(v&&+p.pr>0&&(!v.value.trim()||v.dataset.auto=='1')){v.value=lbMoney(p.pr);v.dataset.auto='1'}}
+lbRef(r)}
+
+/* sugestões ao digitar o nome: filtra o estoque por palavras (qualquer ordem, sem acento) */
+function lbSugHide(r){const g=r&&r.querySelector('.lbsg');if(g){g.hidden=true;g.innerHTML='';r._sg=null}}
+function lbHl(t,ws){const raw=String(t||''),n=nz(raw);if(n.length!=raw.length)return E(raw);const m=new Array(raw.length).fill(0);ws.forEach(w=>{let i=n.indexOf(w);while(i>=0){for(let k=i;k<i+w.length;k++)m[k]=1;i=n.indexOf(w,i+w.length)}});let o='',on=false;for(let i=0;i<raw.length;i++){if(m[i]&&!on){o+='<mark>';on=true}if(!m[i]&&on){o+='</mark>';on=false}o+=E(raw[i])}return o+(on?'</mark>':'')}
+function lbSug(inp){const r=inp.closest('.lbr'),g=r.querySelector('.lbsg');if(!g)return;const q=nz(inp.value).trim();if(r.dataset.t=='iphone'&&!r.dataset.ox||!q){lbSugHide(r);return}
+const ws=q.split(/\s+/).filter(Boolean),seen=new Map();
+S.prod.forEach(p=>{if(p.t=='iphone'||!p.n)return;const hay=nz(p.n+' '+(p.d||''));if(!ws.every(w=>hay.includes(w)))return;seen.set(nz(p.n).trim()+'|'+nz(p.d).trim(),p)});
+const rank=p=>(nz(p.n).startsWith(q)?0:nz(p.n).startsWith(ws[0])?1:2),L=[...seen.values()].sort((a,b)=>rank(a)-rank(b)||(+b.q||0)-(+a.q||0)).slice(0,6);
+if(!L.length||(L.length==1&&nz(L[0].n).trim()==q&&!(L[0].d||'').trim())){lbSugHide(r);return}
+const was=g.hidden;r._sg=L;g.innerHTML=L.map((p,i)=>{const b=cuBase(p),q2=Math.max(0,p.q|0),meta=[p.d,q2>0?q2+' un. em estoque':'sem estoque',b>0?'custo '+R(b):''].filter(Boolean).map(E).join(' · ');return `<button type=button class=lbsi role=option onclick="lbSugPick(this,${i})"><b>${lbHl(p.n,ws)}</b><small>${meta}</small></button>`}).join('');g.hidden=false;if(was)g.scrollIntoView({block:'nearest'})}
+function lbSugPick(b,i){const r=b.closest('.lbr'),p=r._sg&&r._sg[i];if(!p)return;const n=r.querySelector('.lbn'),d=r.querySelector('.lbd'),c=r.querySelector('.lbc');n.value=p.n;d.value=p.d||'';d.dataset.auto='';if(c){c.value='';c.dataset.auto=''}lbSugHide(r);lbFill(r);if(c)c.focus({preventScroll:true})}
+function lbPick(inp){lbFill(inp.closest('.lbr'))}
+function lbIpM(s){const r=s.closest('.lbr'),m=IPH[s.value],g=r.querySelector('.lbgb'),c=r.querySelector('.lbcr');if(m){delete r.dataset.ox;g.disabled=c.disabled=false;g.innerHTML=lbOpt(m[2],'','Escolha…');c.innerHTML=lbOpt(m[3],'','Escolha…')}else{g.innerHTML=c.innerHTML='<option value="">—</option>';g.disabled=c.disabled=true;if(s.value=='x'){r.dataset.ox='1';const n=r.querySelector('.lbn');if(n)n.focus({preventScroll:true})}else delete r.dataset.ox}lbFill(r)}
+function lbIpS(s){lbFill(s.closest('.lbr'))}
+function lbUse(b){const r=b.closest('.lbr'),c=r.querySelector('.lbc');c.value=b.dataset.v;c.dataset.auto='';lbFlash(c);lbSum()}
+function lbType(b,t){const r=b.closest('.lbr');r.dataset.m=1;if(t=='iphone')lbSetT(r,'iphone');else{const p=lbPrev(r.querySelector('.lbn').value,r.querySelector('.lbd').value);lbSetT(r,p&&p.t&&p.t!='iphone'?p.t:'cosm')}lbFill(r)}
 function lbQ(b,d){const i=b.parentNode.querySelector('.lbq');if(i.readOnly)return;i.value=Math.min(9999,Math.max(1,(parseInt(i.value)||1)+d));lbSum()}
 function lbIm(ta){const r=ta.closest('.lbr'),q=r.querySelector('.lbq'),h=r.querySelector('.lbimh'),n=ta.value.split(/[,;\s/]+/).filter(Boolean).length;r.querySelectorAll('.lbst button').forEach(b=>b.disabled=n>0);q.readOnly=n>0;if(n>0){q.value=n;h.textContent=n+(n>1?' aparelhos: um cadastro para cada IMEI.':' aparelho.')}else h.textContent='';lbSum()}
 function lbNum(){const rs=document.querySelectorAll('#lbrs .lbr');rs.forEach((r,i)=>{r.querySelector('.lbrt').textContent=rs.length>1?'Produto '+(i+1):'Produto'})}
-function lbAdd(){const w=$('#lbrs');if(!w)return;const t=document.createElement('div');t.innerHTML=lbRowH({});const r=t.firstElementChild;r.classList.add('nw');r.addEventListener('animationend',e=>{if(e.target===r)r.classList.remove('nw')});w.appendChild(r);lbNum();lbSum();const f=r.querySelector('.lbn');f.focus({preventScroll:true});r.scrollIntoView({block:'center',behavior:lbRM()?'auto':'smooth'})}
-function lbDel(b){const r=b.closest('.lbr'),w=$('#lbrs'),has=[...r.querySelectorAll('input,textarea')].some(i=>i.value.trim()&&!i.classList.contains('lbq'));
+function lbAdd(){const w=$('#lbrs');if(!w)return;const t=document.createElement('div'),la=w.lastElementChild;t.innerHTML=lbRowH({t:la?la.dataset.t:'cosm'});const r=t.firstElementChild;r.classList.add('nw');r.addEventListener('animationend',e=>{if(e.target===r)r.classList.remove('nw')});w.appendChild(r);lbNum();lbRef(r);const f=r.dataset.t=='iphone'?null:r.querySelector('.lbn');if(f)f.focus({preventScroll:true});r.scrollIntoView({block:'center',behavior:lbRM()?'auto':'smooth'})}
+function lbDel(b){const r=b.closest('.lbr'),w=$('#lbrs'),has=[...r.querySelectorAll('input,textarea')].some(i=>i.value.trim()&&!i.classList.contains('lbq'))||!!r.querySelector('.lbmd').value;
 if(has&&b.dataset.arm!='1'){b.dataset.arm='1';b.classList.add('arm');b.textContent='Remover?';clearTimeout(b._t);b._t=setTimeout(()=>{b.dataset.arm='';b.classList.remove('arm');b.innerHTML=ic('trash')},3000);return}
 if(w.children.length<2){const t=document.createElement('div');t.innerHTML=lbRowH({});r.replaceWith(t.firstElementChild);lbSum();return}
 r.style.maxHeight=r.offsetHeight+'px';void r.offsetHeight;r.classList.add('out');setTimeout(()=>{r.remove();lbNum();lbSum()},lbRM()?0:220)}
-function lbKey(e,el,nx){if(e.key!='Enter')return;e.preventDefault();const r=el.closest('.lbr');if(nx=='c')return r.querySelector('.lbc').focus();if(nx=='q'){const q=r.querySelector('.lbq');return(q.readOnly?r.querySelector('.lbi'):q).focus()}const nr=r.nextElementSibling;if(nr)nr.querySelector('.lbn').focus();else lbAdd()}
+function lbKey(e,el,nx){if(e.key!='Enter')return;e.preventDefault();const r=el.closest('.lbr');lbSugHide(r);if(nx=='d')return r.querySelector('.lbd').focus();if(nx=='c')return r.querySelector('.lbc').focus();if(nx=='q'){const q=r.querySelector('.lbq');return(q.readOnly?r.querySelector('.lbi'):q).focus()}const nr=r.nextElementSibling;if(nr)nr.querySelector('.lbn').focus();else lbAdd()}
 function lbArr(){const a=V('lbr')=='0',w=$('.lbw'),h=$('#lbhelp');if(w)w.dataset.arr=a?1:0;if(h)h.textContent=a?'Entra no estoque disponível para venda. O preço de venda é opcional agora.':'Entra no estoque sem preço de venda. Você define o preço quando o pedido chegar, já com o custo final.'}
-function lbSum(){if(!$('#lbrs'))return;const tx=lbTx();let n=0,un=0,tot=0;document.querySelectorAll('#lbrs .lbr').forEach(r=>{const nm=r.querySelector('.lbn').value.trim(),p=lbPrev(nm),c=mny(r.querySelector('.lbc').value),h=r.querySelector('.lbhint'),q=Math.max(1,parseInt(r.querySelector('.lbq').value)||1);if(h)h.hidden=!h.dataset.v||c==mny(h.dataset.v);const c2=c>0?c:(p?Math.max(0,cuBase(p)):0),sub=(c2+Math.round(c2*tx)/100)*q;r.querySelector('.lbs').textContent=nm&&c2>0?R(sub):'—';if(nm){n++;un+=q;tot+=sub}});
+function lbSum(){if(!$('#lbrs'))return;const tx=lbTx();let n=0,un=0,tot=0;document.querySelectorAll('#lbrs .lbr').forEach(r=>{const nm=lbNm(r),ip=r.dataset.t=='iphone',p=lbPrev(nm.n,nm.d,ip),c=mny(r.querySelector('.lbc').value),h=r.querySelector('.lbhint'),q=Math.max(1,parseInt(r.querySelector('.lbq').value)||1);if(h)h.hidden=!h.dataset.v||c==mny(h.dataset.v);const c2=c>0?c:(p?Math.max(0,cuBase(p)):0),sub=(c2+Math.round(c2*tx)/100)*q;r.querySelector('.lbs').textContent=nm.n&&c2>0?R(sub):'—';if(nm.n){n++;un+=q;tot+=sub}});
 $('#lbs1').textContent=n+' produto'+(n==1?'':'s')+' · '+un+' un.'+(tx?' · com taxa de '+String(tx).replace('.',',')+'%':'');lbTween($('#lbs2'),Math.round(tot*100)/100)}
-function lbCollect(){return [...document.querySelectorAll('#lbrs .lbr')].map(r=>({el:r,t:r.dataset.t,m:r.dataset.m,cm:r.dataset.cm,n:r.querySelector('.lbn').value.trim(),c:r.querySelector('.lbc').value.trim(),q:r.querySelector('.lbq').value.trim(),im:r.querySelector('.lbi').value.trim(),co:r.querySelector('.lbo').value,pr:r.querySelector('.lbv').value.trim()}))}
-function lbParse(raw){const isIm=s=>!!s&&s.split(/[,\s/]+/).filter(Boolean).every(t=>/^[A-Za-z0-9]{8,}$/.test(t));return String(raw||'').split('\n').map(x=>x.trim()).filter(Boolean).map(ln=>{const f=ln.split(/\t|\s*[|;]\s*/).map(x=>x.trim());let n=f[0]||'',q=1;const m=n.match(/^(\d+)\s*[xX]\s+(.+)$/);if(m){q=+m[1];n=m[2]}if(f[2])q=Math.max(1,parseInt(f[2])||1);let k=3,pr='';if(f[3]!==undefined&&!isIm(f[3])&&(f.length>=5||/^[R$\s\d.,]*$/.test(f[3]))){pr=f[3];k=4}return {n,c:f[1]||'',q,pr,im:isIm(f[k])?f[k]:'',co:/semi/i.test(f[k+1]||'')?'Seminovo':''}})}
-function lbPaste(){const ta=$('#lbpx'),rows=lbParse(ta.value),e=$('#lbfe');if(!rows.length){e.textContent='Cole ao menos uma linha: nome, custo e quantidade.';return}e.textContent='';const w=$('#lbrs');[...w.children].forEach(r=>{if(!r.querySelector('.lbn').value.trim()&&!r.querySelector('.lbc').value.trim())r.remove()});let first;rows.forEach(d=>{if(d.co)d.cm=1;const t=document.createElement('div');t.innerHTML=lbRowH(d);const r=t.firstElementChild;r.classList.add('nw');r.addEventListener('animationend',ev=>{if(ev.target===r)r.classList.remove('nw')});w.appendChild(r);lbInit(r);const n=r.querySelector('.lbn');lbName(n);lbPick(n);if(!first)first=r});ta.value='';ta.closest('details').open=false;lbNum();lbSum();if(first)first.scrollIntoView({block:'start',behavior:lbRM()?'auto':'smooth'})}
-function lotBM(id,src){const l=(S.lotes||[]).find(x=>x.id==id);if(!l)return;window.__lbCtx={lid:id};if(typeof src=='string')src=lbParse(src);const B=src&&window.__lb&&window.__lb.lid==id?window.__lb:null,rows=src&&src.length?src:[{}],gsel=B?B.gid:(window.__lotGrp||''),pg=B?B.pg:'s',tr=B?!!B.tr:true;
-md(`<b>Adicionar produtos ao lote</b><small style="display:block;margin-bottom:4px">${E(l.n)}</small>
+function lbCollect(){return [...document.querySelectorAll('#lbrs .lbr')].map(r=>({el:r,t:r.dataset.t,m:r.dataset.m,cm:r.dataset.cm,mi:r.querySelector('.lbmd').value,g:r.querySelector('.lbgb').value,cr:r.querySelector('.lbcr').value,n:r.querySelector('.lbn').value.trim(),d:r.querySelector('.lbd').value.trim(),c:r.querySelector('.lbc').value.trim(),q:r.querySelector('.lbq').value.trim(),im:r.querySelector('.lbi').value.trim(),co:r.querySelector('.lbo').value,pr:r.querySelector('.lbv').value.trim()}))}
+function lbParse(raw){const isIm=s=>!!s&&s.split(/[,\s/]+/).filter(Boolean).every(t=>/^[A-Za-z0-9]{8,}$/.test(t));return String(raw||'').split('\n').map(x=>x.trim()).filter(Boolean).map(ln=>{const f=ln.split(/\t|\s*[|;]\s*/).map(x=>x.trim());let n=f[0]||'',q=1;const m=n.match(/^(\d+)\s*[xX]\s+(.+)$/);if(m){q=+m[1];n=m[2]}if(f[2])q=Math.max(1,parseInt(f[2])||1);let k=3,pr='';if(f[3]!==undefined&&!isIm(f[3])&&(f.length>=5||/^[R$\s\d.,]*$/.test(f[3]))){pr=f[3];k=4}const o={n,c:f[1]||'',q,pr,im:isIm(f[k])?f[k]:'',co:/semi/i.test(f[k+1]||'')?'Seminovo':''},ipp=lbIpParse(n);if(ipp)return {...o,t:'iphone',mi:ipp.mi,g:ipp.g,cr:ipp.cr,n:''};if(/^iphone/i.test(n))return {...o,t:'iphone',mi:'x'};return o})}
+function lbPaste(){const ta=$('#lbpx'),rows=lbParse(ta.value),e=$('#lbfe');if(!rows.length){e.textContent='Cole ao menos uma linha: nome, custo e quantidade.';return}e.textContent='';const w=$('#lbrs');[...w.children].forEach(r=>{if(!r.querySelector('.lbn').value.trim()&&!r.querySelector('.lbc').value.trim()&&!r.querySelector('.lbmd').value)r.remove()});let first;rows.forEach(d=>{if(d.co)d.cm=1;const t=document.createElement('div');t.innerHTML=lbRowH(d);const r=t.firstElementChild;r.classList.add('nw');r.addEventListener('animationend',ev=>{if(ev.target===r)r.classList.remove('nw')});w.appendChild(r);lbInit(r);lbFill(r);if(!first)first=r});ta.value='';ta.closest('details').open=false;lbNum();lbSum();if(first)first.scrollIntoView({block:'start',behavior:lbRM()?'auto':'smooth'})}
+function lotBM(id,src){const l=(S.lotes||[]).find(x=>x.id==id);if(!l)return;window.__lbCtx={lid:id};window.__lbIx=null;if(typeof src=='string')src=lbParse(src);const B=src&&window.__lb&&window.__lb.lid==id?window.__lb:null,rows=src&&src.length?src:[{}],gsel=B?B.gid:(window.__lotGrp||''),pg=B?B.pg:'s',tr=B?!!B.tr:true;
+md(`<div class=lbsc><b class=lbti>Adicionar produtos ao lote</b><small class=lbsub>${E(l.n)}</small>
 <div class=lbw data-arr="${tr?0:1}">
 <label for=lbg>Fornecedor destes produtos</label><select id=lbg onchange="lbSum()">${lotGs(l).map(g=>`<option value="${g.id}"${gsel==g.id?' selected':''}>${E(g.n)}${g.tx?' · taxa '+String(g.tx).replace('.',',')+'%':''}</option>`).join('')}</select>
 <label id=lbpl>Pagamento da compra</label>${lbSeg('lbp','lbpl',[['s','Saldo da loja'],['n','Já estava pago']],pg)}
 <label id=lbrl>Situação da mercadoria</label>${lbSeg('lbr','lbrl',[['1','A caminho'],['0','Já chegou']],tr?'1':'0')}
 <small id=lbhelp class=lbhelp></small>
-<datalist id=lbdl>${lbDl()}</datalist>
+
 <div id=lbrs>${rows.map(lbRowH).join('')}</div>
 <button type=button class=g2 onclick="lbAdd()">${ic('plus')} Adicionar outro produto</button>
 <details class=lbpaste><summary>Colar de uma planilha</summary><small style="display:block;margin:6px 0">Uma linha por produto, com as colunas nome, custo e quantidade. IMEI e condição são opcionais. Separe por tab, | ou ;</small><textarea id=lbpx rows=4 placeholder="Medicube Zero Pore Pad&#9;58&#9;10"></textarea><button type=button class=g2 onclick="lbPaste()">Preencher os campos</button></details>
-</div>
+</div></div>
 <div class=lbf><div class=lbfs><span>Total da compra<br><small id=lbs1></small></span><b id=lbs2>R$ 0,00</b></div><div id=lbfe class=lbfe role=alert></div><div class=lbfb><button class=g2 onclick=md()>Cancelar</button><button class=b onclick="lotBRev('${id}')">Revisar antes de cadastrar</button></div></div>`);
-const mb=$('#md .mb');if(mb)mb.classList.add('wide');document.querySelectorAll('#lbrs .lbr').forEach(lbInit);lbNum();lbArr();lbSum();if(!src){const f=$('#lbrs .lbn');if(f)f.focus({preventScroll:true})}}
+const mb=$('#md .mb');if(mb)mb.classList.add('wide','lbsheet');document.querySelectorAll('#lbrs .lbr').forEach(lbInit);lbNum();lbArr();lbSum();if(!src&&!matchMedia('(pointer:coarse)').matches){const f=$('#lbrs .lbn');if(f)f.focus({preventScroll:true})}}
 function lotBRev(id){const l=(S.lotes||[]).find(x=>x.id==id);if(!l)return;const G=lotGs(l).find(g=>g.id==V('lbg'))||lotGs(l)[0],tx=+G.tx||0,pg=V('lbp'),tr=V('lbr')=='1',arr=lbCollect(),src=arr.map(({el,...o})=>o),rows=[],have=new Set(S.prod.map(p=>String(p.im||'').trim()).filter(Boolean)),seen=new Set();let bad=null;
 document.querySelectorAll('#lbrs .lbr').forEach(r=>{r.classList.remove('er');r.querySelector('.lbe').textContent=''});$('#lbfe').textContent='';
 const fail=(o,m)=>{o.el.querySelector('.lbe').textContent=m;o.el.classList.add('er');if(!bad)bad=o.el};
-arr.forEach(o=>{if(!o.n&&!o.c&&!o.im)return;if(!o.n)return fail(o,'Escreva o nome do produto.');
-const prev=lbPrev(o.n);let custo=mny(o.c);if(!(custo>0)&&prev)custo=cuBase(prev);if(!(custo>0))return fail(o,'Informe o custo unitário. Este produto ainda não está no estoque para o app copiar o custo.');
-const tp=o.t,qt=Math.max(1,parseInt(o.q)||1);let pr=tr?0:mny(o.pr);if(!tr&&!pr&&prev)pr=+prev.pr||0;const co=tp=='iphone'?(o.co||(prev&&prev.co)||'Novo'):'',d=(prev&&prev.d)||'',ims=tp=='iphone'&&o.im?o.im.split(/[,;\s/]+/).filter(Boolean):[];
+arr.forEach(o=>{const ipx=o.t=='iphone';if(!(o.c||o.im)&&(ipx?!o.mi:!o.n))return;
+if(ipx){if(!o.mi)return fail(o,'Escolha o modelo do iPhone.');if(o.mi=='x'){if(!o.n)return fail(o,'Escreva o nome do modelo.')}else if(!o.g||!o.cr)return fail(o,'Escolha a capacidade e a cor do iPhone.')}else if(!o.n)return fail(o,'Escreva o nome do produto.');
+const nm=lbNm(o.el),prev=lbPrev(nm.n,nm.d,ipx);let custo=mny(o.c);if(!(custo>0)&&prev)custo=cuBase(prev);if(!(custo>0))return fail(o,'Informe o custo unitário. Este produto ainda não está no estoque para o app copiar o custo.');
+const tp=o.t,qt=Math.max(1,parseInt(o.q)||1);let pr=tr?0:mny(o.pr);if(!tr&&!pr&&prev)pr=+prev.pr||0;const co=tp=='iphone'?(o.co||(prev&&prev.co)||'Novo'):'',d=nm.d,ims=tp=='iphone'&&o.im?o.im.split(/[,;\s/]+/).filter(Boolean):[];
 for(const i of ims){if(have.has(i)||seen.has(i))return fail(o,'O IMEI '+i+' já está cadastrado ou repetido.');seen.add(i)}
-if(ims.length>1)ims.forEach(i=>rows.push({n:o.n,d,t:tp,c0:custo,pr,q:1,im:i,co}));else rows.push({n:o.n,d,t:tp,c0:custo,pr,q:ims.length==1?1:qt,im:ims[0]||'',co})});
-if(bad){bad.scrollIntoView({block:'center',behavior:lbRM()?'auto':'smooth'});const f=bad.querySelector('.lbn');if(f)f.focus({preventScroll:true});return}
+if(ims.length>1)ims.forEach(i=>rows.push({n:nm.n,d,t:tp,c0:custo,pr,q:1,im:i,co}));else rows.push({n:nm.n,d,t:tp,c0:custo,pr,q:ims.length==1?1:qt,im:ims[0]||'',co})});
+if(bad){bad.scrollIntoView({block:'center',behavior:lbRM()?'auto':'smooth'});const f=bad.dataset.t=='iphone'&&!bad.dataset.ox?bad.querySelector('.lbmd'):bad.querySelector('.lbn');if(f)f.focus({preventScroll:true});return}
 if(!rows.length){$('#lbfe').textContent='Preencha pelo menos um produto: nome e custo unitário.';return}
 window.__lb={lid:id,gid:G.id,pg,rows,tx,src,tr};
 let tot=0,un=0,fee=0;rows.forEach(r=>{const f=Math.round(r.c0*tx)/100;fee+=f*r.q;tot+=(r.c0+f)*r.q;un+=r.q});tot=Math.round(tot*100)/100;fee=Math.round(fee*100)/100;
 const neg=pg=='s'&&Math.round((cx()-tot)*100)/100<-.005,sp=rows.filter(r=>!(r.pr>0)).length;
 md(`<b>Conferir antes de cadastrar</b><small style="display:block;margin-bottom:8px">${E(l.n)} · ${E(G.n)}</small>
 <div class=card><div class=it><span>Produtos / unidades</span><b>${rows.length} / ${un}</b></div><div class=it><span>Total da compra${tx?' (com taxa de '+String(tx).replace('.',',')+'%)':''}</span><b>${R(tot)}</b></div>${fee>0?`<div class=it><span>Taxa do fornecedor incluída</span><b>${R(fee)}</b></div>`:''}<div class=it><span>${pg=='s'?'Sai do saldo da loja':'Saldo da loja'}</span><b class=${neg?'no':''}>${pg=='s'?R(tot):'não muda'}</b></div>${neg?'<small class=no style="display:block">Atenção: o saldo ficará negativo ('+R(cx()-tot)+').</small>':''}${sp?`<small style="display:block">${tr?'O preço de venda fica para depois: quando o pedido chegar, o app pede o preço já com o custo final.':sp+' produto'+(sp>1?'s':'')+' sem preço de venda. O app lembra você de definir no Estoque.'}</small>`:''}</div>
-${rows.slice(0,60).map(r=>`<div class=it><span><b>${E(r.n)}</b>${r.t=='iphone'&&r.co?' · '+E(r.co):''} · ${r.q} un.${r.t!='iphone'&&rpFind(r.t,r.n,r.d,id,G.id,tr)?' · <span class=lst2>repõe estoque</span>':''}<br><small>custo ${R(r.c0)}${tx?' + taxa '+R(Math.round(r.c0*tx)/100):''} · venda ${r.pr>0?R(r.pr):'a definir'}${r.im?' · IMEI '+E(r.im):''}</small></span><b>${R((r.c0+Math.round(r.c0*tx)/100)*r.q)}</b></div>`).join('')}${rows.length>60?`<small>e mais ${rows.length-60} linhas</small>`:''}
+${rows.slice(0,60).map(r=>`<div class=it><span><b>${E(r.n)}</b>${r.d?' · '+E(r.d):''}${r.t=='iphone'&&r.co?' · '+E(r.co):''} · ${r.q} un.${r.t!='iphone'&&rpFind(r.t,r.n,r.d,id,G.id,tr)?' · <span class=lst2>repõe estoque</span>':''}<br><small>custo ${R(r.c0)}${tx?' + taxa '+R(Math.round(r.c0*tx)/100):''} · venda ${r.pr>0?R(r.pr):'a definir'}${r.im?' · IMEI '+E(r.im):''}</small></span><b>${R((r.c0+Math.round(r.c0*tx)/100)*r.q)}</b></div>`).join('')}${rows.length>60?`<small>e mais ${rows.length-60} linhas</small>`:''}
 <button class=b onclick=lotBGo()>Cadastrar tudo</button><button class=g2 onclick="lotBM('${id}',window.__lb.src)">Voltar e editar</button>`)}
 
 /* ===== Preço de venda na chegada: custo final já com frete e taxas, margem aplicada a todos ===== */
