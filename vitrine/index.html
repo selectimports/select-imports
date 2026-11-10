@@ -363,6 +363,39 @@ body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card)
 .ic{border:1px solid var(--line);background:var(--card);color:var(--brand)}.ic:hover{background:var(--soft)}
 .fab{transition:bottom .22s ease,transform .22s ease,opacity .22s ease}.fab.hd{transform:translateY(18px) scale(.85);opacity:0;pointer-events:none}
 .fv svg{width:20px;height:20px}.fv[aria-pressed="true"]{color:var(--no)}
+
+/* ===== alinhamento dos cards: preço e botão ancorados embaixo, qualquer que seja o nº de selos ===== */
+.card .ap{margin-top:auto!important;padding-top:8px;min-height:1.3em}
+.card .btn.sf{margin-top:0!important}
+.card .pr+.sm{min-height:3em}
+.card .dt,.card .dt.e{height:18px;min-height:18px;box-sizing:border-box;align-items:center;margin:6px 4px 8px}
+.card>div[aria-hidden="true"]:not(.dt){flex:0 0 10px!important;min-height:0!important}
+@media (min-width:1024px){
+  /* grade única de 12 colunas: tudo alinhado nas mesmas bordas */
+  #hm{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:16px;align-items:stretch}
+  #hm>*{grid-column:1/-1;min-width:0}
+  #hm>[data-r=hd],#hm>[data-r=se],#hm>[data-r=tb],#hm>[data-r=st]{display:block}
+  #hm>[data-r=sc]{grid-column:1/7;display:flex;align-items:center}
+  #hm>[data-r=se]{grid-column:7/13}
+  #hm>[data-r=sc] .chips,#hm>[data-r=se] input[type=search]{margin:0}
+  #hm>[data-r=sc] .chips{flex-wrap:nowrap}
+  #hm>[data-r=sc] .chip{white-space:nowrap}
+  #hm>[data-r=tr]{grid-column:1/7}#hm>[data-r=en]{grid-column:7/13}
+  #hm [data-r=tr]>*,#hm [data-r=en]>*,#hm [data-r=st]>*{max-width:none;margin-left:0;margin-right:0}
+  #hm [data-r=tr],#hm [data-r=en]{display:flex}
+  #hm [data-r=tr]>section,#hm [data-r=en]>section{flex:1;display:flex;flex-direction:column;align-items:flex-start;margin-top:0;margin-bottom:0}
+  #hm [data-r=tr] .trbtn,#hm [data-r=en] .btn{margin-top:auto;width:auto;min-width:220px}
+  #hm [data-r=tr] .sm,#hm [data-r=en] .sm{margin-bottom:16px!important}
+  #steps{columns:2;column-gap:56px}
+  #steps h2:nth-of-type(2){break-before:column;margin-top:0!important}
+  #steps .st,#steps details{break-inside:avoid}
+  .cr .chip[data-av]{margin-left:auto}
+  #hm [data-r=tr] .tri{display:none}
+  #hm [data-r=tr] .trbtn,#hm [data-r=en] .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 22px;border-radius:99px;background:var(--btn);color:#fff;border:1.5px solid transparent;font-weight:600}
+  #hm [data-r=tr] .trc,#hm [data-r=en] section{padding:22px 24px}
+  .pf{align-items:center}.pf>div:nth-child(2){display:flex;flex-direction:column;gap:2px;justify-content:center}
+  .pf .sm{margin:0}
+}
 </style></head><body class="np">
 <div class="ann" id="ann" hidden></div>
 <header class="gh" id="gh"><div class="ghi"><button type="button" class="gb" data-home aria-label="Ir para o início da vitrine"><img class="lg" src="../icons/icon-192.png" alt=""><i class="wm" role="img" aria-label="select imports"></i></button></div></header>
@@ -462,7 +495,7 @@ const badges=(m,np)=>{let b='';if(m.dest)b+='<span class="bd d">Destaque</span>'
 const cname=m=>(cfg.cats.find(c=>c.id==m.c)||{}).nome||'';
 const phd=m=>`<div class="phd">${ic(m.c,48)}<small>Foto em breve</small></div>`;
 function pb(x,big){if(!cfg.preco||!(pv(x)>0))return `<div class="pr" style="font-size:${big?24:16}px">Consulte o preço</div>`;return (x.old&&x.old>x.pr?`<div class="old">${R(x.old)}</div>`:'')+`<div class="pr" ${big?'style="font-size:36px;margin:2px 0"':''}>${R(pv(x))}</div><div class="sm" ${big?'style="margin:0"':''}>${x.pix||cfg.pixb!==false?'no Pix':''}${x.par?`${x.pix||cfg.pixb!==false?' · ':''}ou ${x.par.n}x de ${R(x.par.v)} no cartão`:''}</div>`}
-function card(m){const s=sl[m.id]||0,n=cols(m).length,x=cheap(m),many=on.carousel&&m.ph.length>1;return `<div class="card${gdisp(m)=='esgotado'?' off':''}" data-id="${m.id}"><div class="art">${many?`<div class="trk" data-trk="${m.id}">${m.ph.map((u,i)=>`<img ${i?'loading="lazy" ':''}decoding="async" draggable="false" alt="${X(m.n)}" src="${X(u)}">`).join('')}</div><button class="ar l" data-sl="${m.id}:-1" aria-label="Foto anterior">${si('chl',16)}</button><button class="ar r" data-sl="${m.id}:1" aria-label="Próxima foto">${si('chr',16)}</button><div class="dots" aria-hidden="true">${m.ph.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:m.ph.length?`<img loading="lazy" decoding="async" alt="${X(m.n)}" src="${X(m.ph[0])}">`:phd(m)}${on.fav?`<button class="fv" data-fav="${m.id}" aria-label="Favoritar ${X(m.n)}" aria-pressed="${favs.has(m.id)}">${si('heart',20,favs.has(m.id))}</button>`:''}</div><div class="nm">${X(m.n)}</div><div class="sm">${[caps(m).join(' · '),on.colors&&n?n+' cor'+(n>1?'es':''):''].filter(Boolean).join(' · ')||X(m.v[0].d)}</div>${on.badges?`<div style="margin:6px 4px 0"><span class="bd">${X(coTxt(m))}</span>${badges(m)}</div>`:''}<div class="sm" style="margin-top:8px">${multi(m)&&cfg.preco&&pv(x)>0?'A partir de':''}</div>${pb(x)}${on.colors&&n?`<div class="dt">${cols(m).map(c=>`<i style="background:${c[1]}" title="${X(c[0])}"></i>`).join('')}</div>`:''}<div style="flex:1;min-height:12px" aria-hidden="true"></div><button type="button" class="btn sf" data-det aria-label="Ver detalhes de ${X(m.n)}" style="padding:11px">Ver detalhes</button></div>`}
+function card(m){const s=sl[m.id]||0,n=cols(m).length,x=cheap(m),many=on.carousel&&m.ph.length>1;return `<div class="card${gdisp(m)=='esgotado'?' off':''}" data-id="${m.id}"><div class="art">${many?`<div class="trk" data-trk="${m.id}">${m.ph.map((u,i)=>`<img ${i?'loading="lazy" ':''}decoding="async" draggable="false" alt="${X(m.n)}" src="${X(u)}">`).join('')}</div><button class="ar l" data-sl="${m.id}:-1" aria-label="Foto anterior">${si('chl',16)}</button><button class="ar r" data-sl="${m.id}:1" aria-label="Próxima foto">${si('chr',16)}</button><div class="dots" aria-hidden="true">${m.ph.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:m.ph.length?`<img loading="lazy" decoding="async" alt="${X(m.n)}" src="${X(m.ph[0])}">`:phd(m)}${on.fav?`<button class="fv" data-fav="${m.id}" aria-label="Favoritar ${X(m.n)}" aria-pressed="${favs.has(m.id)}">${si('heart',20,favs.has(m.id))}</button>`:''}</div><div class="nm">${X(m.n)}</div><div class="sm">${[caps(m).join(' · '),on.colors&&n?n+' cor'+(n>1?'es':''):''].filter(Boolean).join(' · ')||X(m.v[0].d)}</div>${on.badges?`<div style="margin:6px 4px 0"><span class="bd">${X(coTxt(m))}</span>${badges(m)}</div>`:''}<div class="sm ap" style="margin-top:8px">${multi(m)&&cfg.preco&&pv(x)>0?'A partir de':''}</div>${pb(x)}${on.colors&&n?`<div class="dt">${cols(m).map(c=>`<i style="background:${c[1]}" title="${X(c[0])}"></i>`).join('')}</div>`:'<div class="dt e" aria-hidden="true"></div>'}<div style="flex:1;min-height:12px" aria-hidden="true"></div><button type="button" class="btn sf" data-det aria-label="Ver detalhes de ${X(m.n)}" style="padding:11px">Ver detalhes</button></div>`}
 const vrows=m=>m.v.map((x,i)=>`<div class="vr">${x.hex?`<i style="background:${x.hex}"></i>`:''}<span class="vn">${X(x.d||m.n)}${x.co?`<br><small class="sm" style="margin:0">${X(x.co)}${x.bat?' · bateria '+X(x.bat)+'%':''}</small>`:''}</span><span style="text-align:right"><b>${cfg.preco&&pv(x)>0?R(pv(x)):''}</b>${x.par&&cfg.preco&&pv(x)>0?`<div class="sm" style="margin:0">${x.par.n}x de ${R(x.par.v)}</div>`:''}</span>${waA(m,x,'wb',WA(20)).replace('<a ','<a aria-label="Chamar no WhatsApp sobre '+X(nmOf(m,x))+'" ')}<button data-open="${m.id}:${i}" aria-label="Ver detalhes de ${X(nmOf(m,x))}">${si('chr',18)}</button></div>`).join('');
 function lrow(m){const o=exp.has(m.id),t=m.ph.length?`<img alt="" loading="lazy" decoding="async" src="${X(m.ph[0])}">`:ic(m.c,26),p=mp(m);return `<div class="lr${o?' o':''}" data-id="${m.id}"><button class="lh" data-ex="${m.id}" aria-expanded="${o}"><div class="art mini">${t}</div><div class="lm"><b>${X(m.n)}</b>${on.badges?` <span class="bd">${X(coTxt(m))}</span>`:''}<div class="sm" style="margin:2px 0 0">${m.v.length} opç${m.v.length>1?'ões':'ão'}</div></div><div class="lp"><div class="sm">${cfg.preco&&p>0?(multi(m)?'A partir de':''):''}</div><b>${cfg.preco&&p>0?R(p):'Consulte'}</b></div><span class="cv" aria-hidden="true">${si('chd',20)}</span></button><div class="vw"${o?'':' inert'}><div class="vi">${o?vrows(m):''}</div></div></div>`}
 const cmpP=(a,b,d)=>{const x=mp(a),y=mp(b);return !x||!y?(!x)-(!y):d*(x-y)};
