@@ -1,0 +1,17 @@
+# sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# dependências e deploy
+node_modules/
+.vercel/
+.netlify/
+
+# segredos (nunca no repositório)
+.env
+.env.*
+*.pem
+
+# backups e exportações do app
+backup-select-imports-*.json

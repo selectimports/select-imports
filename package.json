@@ -1,0 +1,12 @@
+{
+  "name": "select-imports",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema de gestão e vitrine pública da loja Select Imports (PWA estático + Supabase).",
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "start": "npx --yes serve . -l 3000"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,69 @@
+name: Extrair arquivos do site
+
+# Sobe o arquivo select-imports-arquivos-extraidos.zip na raiz do repositório (pelo site do GitHub, inclusive no celular).
+# O workflow extrai, confere com scripts/check.mjs e só então salva. Se algo estiver quebrado, nada é publicado.
+# Obs.: o zip NÃO pode conter a pasta .github (o GitHub bloqueia que este workflow altere workflows).
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: extrair-site
+  cancel-in-progress: false
+
+jobs:
+  extrair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Extrair arquivos do site
+        id: zip
+        run: |
+          ZIP=$(find . -maxdepth 1 -name 'select-imports-arquivos-extraidos.zip' -print -quit)
+          if [ -z "$ZIP" ]; then
+            echo "Nenhum zip para extrair. Nada a fazer."
+            echo "achou=nao" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          rm -rf /tmp/site && mkdir -p /tmp/site
+          unzip -oq "$ZIP" -d /tmp/site
+
+          # se o zip veio com uma única pasta por fora, entra nela
+          if [ "$(ls -A /tmp/site | wc -l)" -eq 1 ] && [ -d "/tmp/site/$(ls -A /tmp/site)" ]; then
+            SRC="/tmp/site/$(ls -A /tmp/site)"
+          else
+            SRC=/tmp/site
+          fi
+
+          rm -rf "$SRC/.github"
+          cp -a "$SRC"/. .
+          rm -f "$ZIP"
+          echo "achou=sim" >> "$GITHUB_OUTPUT"
+
+      - name: Preparar Node
+        if: steps.zip.outputs.achou == 'sim'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Conferir o site (sintaxe, JSON, arquivos e segredos)
+        if: steps.zip.outputs.achou == 'sim'
+        run: node scripts/check.mjs
+
+      - name: Salvar arquivos extraídos
+        if: steps.zip.outputs.achou == 'sim'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Atualizar site" || echo "Sem alterações"
+          git push

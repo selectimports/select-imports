@@ -1,13 +1,21 @@
 {
+  "id": "./",
   "name": "Select Imports",
   "short_name": "Select Imports",
   "description": "Controle da loja Select Imports",
+  "lang": "pt-BR",
+  "dir": "ltr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#48336C",
   "theme_color": "#48336C",
+  "categories": [
+    "business",
+    "shopping",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "icons/icon-192.png",

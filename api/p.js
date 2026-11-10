@@ -4,17 +4,19 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&a
 const brl = n => 'R$ ' + Number(n).toLocaleString('pt-BR', { minimumFractionDigits: Number.isInteger(+n) ? 0 : 2, maximumFractionDigits: 2 });
 
 module.exports = async (req, res) => {
-  const host = req.headers['x-forwarded-host'] || req.headers.host || '';
-  const origin = 'https://' + host;
+  const rawHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+  if (!/^[a-z0-9.-]+(:\d+)?$/i.test(rawHost)) { res.status(400).send('Requisição inválida'); return; }
+  const origin = 'https://' + rawHost;
+  const T = () => ({ signal: AbortSignal.timeout(3000) }); /* prévia de link não pode travar o WhatsApp */
   const id = String((req.query && req.query.id) || '').slice(0, 80);
   const dest = '/vitrine/' + (id ? '?p=' + encodeURIComponent(id) : '');
   let title = 'SELECT IMPORTS | Vitrine', desc = 'Apple & Cosméticos', img = origin + '/icons/icon-512.png';
   try {
-    const cfgTxt = await (await fetch(origin + '/config.js')).text();
+    const cfgTxt = await (await fetch(origin + '/config.js', T())).text();
     const U = (/SUPABASE_URL\s*=\s*['"]([^'"]+)['"]/.exec(cfgTxt) || [])[1];
     const K = (/SUPABASE_ANON_KEY\s*=\s*['"]([^'"]+)['"]/.exec(cfgTxt) || [])[1];
     if (U && K && id) {
-      const r = await fetch(U + '/rest/v1/vitrine_publica?id=eq.loja&select=dados', { headers: { apikey: K, Authorization: 'Bearer ' + K } });
+      const r = await fetch(U + '/rest/v1/vitrine_publica?id=eq.loja&select=dados', { headers: { apikey: K, Authorization: 'Bearer ' + K }, signal: AbortSignal.timeout(3000) });
       const D = ((await r.json())[0] || {}).dados;
       const it = D && D.ativa && (D.itens || []).find(x => String(x.id) === id);
       if (it) {
@@ -25,6 +27,7 @@ module.exports = async (req, res) => {
         if (preco) partes.push(brl(it.pix || it.pr) + (it.pix || c.pixb !== false ? ' no Pix' : ''));
         if (preco && it.par && it.par.n > 1) partes.push('ou ' + it.par.n + 'x de ' + brl(it.par.v) + ' no cartão');
         if (it.co) partes.push(it.co);
+        if (it.ori) partes.push('Original Apple');
         if (it.gar) partes.push(it.gar);
         desc = partes.join(' · ') || desc;
         const ph = (it.ph || []).find(u => /^https?:\/\//.test(u));

@@ -2,6 +2,7 @@
   X-Robots-Tag: noindex, nofollow
   X-Content-Type-Options: nosniff
   Referrer-Policy: same-origin
-  X-Frame-Options: DENY
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
 /sw.js
   Cache-Control: no-cache
