@@ -360,6 +360,8 @@ body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card)
 .cv{display:grid;place-items:center;width:24px;height:24px;color:var(--mute)}
 .vr>button[data-open]{display:grid;place-items:center;width:34px;height:34px;flex:none;color:var(--mute)}
 #pd [data-back]{min-height:44px;padding:0 14px 0 10px}
+.ic{border:1px solid var(--line);background:var(--card);color:var(--brand)}.ic:hover{background:var(--soft)}
+.fab{transition:bottom .22s ease,transform .22s ease,opacity .22s ease}.fab.hd{transform:translateY(18px) scale(.85);opacity:0;pointer-events:none}
 .fv svg{width:20px;height:20px}.fv[aria-pressed="true"]{color:var(--no)}
 </style></head><body class="np">
 <div class="ann" id="ann" hidden></div>
@@ -659,4 +661,6 @@ addEventListener('online',()=>{if(!D&&OK)load(true)});
 /* fotos: espaço reservado, brilho enquanto carrega e entrada suave */
 (function(){const mk=i=>{const a=i.closest&&i.closest('.art');if(a&&i.complete&&i.naturalWidth)a.classList.add('ld')};document.addEventListener('load',e=>{if(e.target&&e.target.tagName==='IMG')mk(e.target)},true);new MutationObserver(()=>document.querySelectorAll('.art img:not([data-s])').forEach(i=>{i.dataset.s=1;mk(i)})).observe(document.documentElement,{childList:true,subtree:true})})();
 load();
+/* o botão do WhatsApp some ao descer a página (não cobre coração nem preço) e volta ao subir */
+(()=>{let y=scrollY;addEventListener('scroll',()=>{const f=document.getElementById('fab');if(!f)return;const n=scrollY,d=n-y;if(n<120){f.classList.remove('hd');y=n}else if(d>8){f.classList.add('hd');y=n}else if(d<-8){f.classList.remove('hd');y=n}},{passive:true})})();
 </script></body></html>
