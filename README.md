@@ -52,6 +52,11 @@ Importante:
 - O zip **não pode conter a pasta `.github`**: o GitHub impede que um workflow altere workflows. Para mudar os workflows, edite-os pelo site do GitHub; as versões atuais estão em `docs/workflows/`.
 - A extração **sobrescreve** arquivos, mas **não apaga** os que saíram do projeto. Arquivos antigos que não são mais usados precisam ser excluídos à mão no GitHub.
 
+## Cadastro de produtos e venda a prazo
+
+- **Estoque › Cadastrar novos produtos** é um cartão único: um formulário por produto (iPhone, Cosmético, Acessório; Eletrônico quando ativado no próprio cartão), com **lote opcional** (fornecedor, taxa e frete rateado em *Fretes e custos*), pagamento pelo saldo ou já pago, situação (a caminho/chegou) e **nota fiscal** por unidade ou do pedido inteiro (dividida entre as unidades).
+- **Venda a prazo:** na venda, a forma de pagamento **A prazo** (com prazo em dias) lança o valor em *Contas › A receber* ligado à venda e ao cliente. O valor só entra no saldo quando é marcado como recebido. Editar ou cancelar a venda mantém tudo coerente (a lixeira restaura o valor a receber).
+
 ## Fornecedores e frete por cidade
 
 Cada fornecedor do lote tem uma cidade, e ela define o frete:
