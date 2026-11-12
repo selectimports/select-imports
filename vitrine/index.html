@@ -463,6 +463,8 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
 #ft ul{list-style:none;margin:0;padding:0}
 #ft li{display:block}
 #ft .ftx{display:block;padding:6px 0;color:var(--mute);line-height:1.5}
+#ft li a>svg{flex:none;display:block}
+#ft li a>svg[viewBox][width="24"]{margin:-3px}
 .ftl{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--mute)}
 
 @media (min-width:640px){
@@ -545,7 +547,7 @@ return it.length<2?'':`<div class="bf" role="list">${it.map(x=>`<div class="bfi"
 const footH=dt=>{const nm=/^\s*(select\s*imports)?\s*$/i.test(cfg.nome||'')?'<i class="wm" role="img" aria-label="select imports"></i>':`<b class="hn">${X(nmShow())}</b>`,ig=cfg.insta?String(cfg.insta).replace('@',''):'',
 help=[(cfg.como||faqL().length)&&cfg.como?'<li><button type="button" class="fl" data-how>Como comprar</button></li>':'',(cfg.faq||[]).length?'<li><button type="button" class="fl" data-faq>Perguntas frequentes</button></li>':'',cfg.trade?'<li><button type="button" class="fl" data-trsheet>Avaliar meu iPhone</button></li>':'',cfg.enc&&cfg.whats?`<li><a href="${wa('Olá! Quero fazer uma encomenda pela vitrine da '+cfg.nome+'.')}" target="_blank" rel="noopener" data-tk="encomenda">Fazer uma encomenda</a></li>`:''].join(''),
 at=(cfg.whats?`<li><a href="${wa('Olá! Vim pela vitrine da '+cfg.nome+'.')}" target="_blank" rel="noopener" data-tk="whatsapp">${fone(cfg.whats)}</a></li>`:'')+(cfg.horario?`<li><span class="ftx">${X(cfg.horario)}</span></li>`:''),
-rs=(ig?`<li><a href="https://instagram.com/${encodeURIComponent(ig)}" target="_blank" rel="noopener">${si('ig',18)}<span>@${X(ig)}</span></a></li>`:'')+(cfg.whats?`<li><a href="${wa('Olá! Vim pela vitrine da '+cfg.nome+'.')}" target="_blank" rel="noopener" data-tk="whatsapp">${WA(18)}<span>WhatsApp</span></a></li>`:'');
+rs=(ig?`<li><a href="https://instagram.com/${encodeURIComponent(ig)}" target="_blank" rel="noopener">${si('ig',24)}<span>@${X(ig)}</span></a></li>`:'')+(cfg.whats?`<li><a href="${wa('Olá! Vim pela vitrine da '+cfg.nome+'.')}" target="_blank" rel="noopener" data-tk="whatsapp">${WA(18)}<span>WhatsApp</span></a></li>`:'');
 return `<div class="fti"><div class="ftg"><div class="ftb">${nm}${cfg.sub?`<p>${X(cfg.sub)}</p>`:''}</div>${help?`<nav aria-label="Ajuda"><h3>Ajuda</h3><ul>${help}</ul></nav>`:''}${at?`<nav aria-label="Atendimento"><h3>Atendimento</h3><ul>${at}</ul></nav>`:''}${rs?`<nav aria-label="Redes e contato"><h3>Siga e fale com a gente</h3><ul>${rs}</ul></nav>`:''}</div><div class="ftl"><span>© ${new Date().getFullYear()} ${X(cfg.nome)}. Todos os direitos reservados.</span><span>${isNaN(dt)?'':'Atualizado em '+dt.toLocaleDateString('pt-BR')}${cfg.rodape?(isNaN(dt)?'':' · ')+X(cfg.rodape):''}</span></div></div>`};
 /* ---------- utilidades de interface ---------- */
 const setR=(el,h)=>{if(el&&el.__h!==h){el.innerHTML=h;el.__h=h}},setT=(el,t)=>{if(el&&el.textContent!==t)el.textContent=t};
