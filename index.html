@@ -2080,4 +2080,29 @@ migAc();
 
 
 auth();
+
+/* iPhone com mais de uma unidade: um campo de IMEI por unidade; ao salvar, cada IMEI preenchido vira um cadastro próprio de 1 un. */
+const IMX=20,imR2=v=>Math.round(v*100)/100;
+function imSplit(i,ims){const p=S.prod[i];if(!p)return 0;delete p.ims;if(!ims.length)return 0;
+const Q=Math.max(1,p.q|0),n=ims.length,ts=Date.now(),vu=(p.vpago||0)/Q,m=Q-n,o0=p.q0,
+cs=(q,fresh)=>(p.custos||[]).map(e=>({...e,...(fresh?{id:U()}:{}),v:imR2(e.u>0?e.u*q:(e.v||0)*q/Q)})),
+mk=(k,im)=>{const c=JSON.parse(JSON.stringify(p));delete c.ph;delete c.cv;c.id=U();c.cr=ts+k;c.q=1;c.im=im;c.vpago=imR2(vu);if(o0!=null)c.q0=1;else delete c.q0;if(p.custos)c.custos=cs(1,true);return c},cl=[];
+if(m>0){for(let k=0;k<n;k++)cl.push(mk(k,ims[k]));p.q=m;p.im=''}else{p.q=1;p.im=ims[0];for(let k=1;k<n;k++)cl.push(mk(k,ims[k]))}
+if(p.custos)p.custos=cs(p.q,false);
+p.vpago=imR2((p.vpago||0)-cl.reduce((a,c)=>a+c.vpago,0));
+if(o0!=null)p.q0=Math.max(p.q,o0-cl.length);
+S.prod.splice(i+1,0,...cl);return cl.length}
+const _pkIm=pk;pk=function(i){const r=_pkIm(i),p=S.prod[i];if(p&&p.t=='iphone'){const xs=[...document.querySelectorAll('.mim')];if(xs.length)p.ims=xs.map(x=>x.value.trim())}return r};
+const _edPIm=edP;edP=function(i){_edPIm(i);const p=S.prod[i];if(!p||p.t!='iphone')return;const q=p.q|0,a=$('#mi');if(q<2||q>IMX||!a)return;
+const lb=a.previousElementSibling;if(lb&&lb.tagName=='LABEL')lb.textContent='IMEI / serial da unidade 1 (opcional)';
+let h=a;for(let k=1;k<q;k++){const l=document.createElement('label');l.textContent='IMEI / serial da unidade '+(k+1)+' (opcional)';const x=document.createElement('input');x.className='mim';x.id='mim'+k;x.setAttribute('autocomplete','off');x.value=(p.ims||[])[k-1]||'';x.setAttribute('oninput',"imLive(this,'"+p.id+"')");h.after(l);l.after(x);h=x}
+const nt=document.createElement('small');nt.style.display='block';nt.textContent='Cada IMEI preenchido vira um cadastro próprio de 1 unidade. As unidades sem IMEI continuam juntas.';h.after(nt)};
+let imSv=0;const _saveIm=save;save=function(){imSv++;return _saveIm.apply(this,arguments)};
+const _svPIm=svP;svP=function(i){const p=S.prod[i],xs=[...document.querySelectorAll('.mim')];if(!p||p.t!='iphone'||!xs.length)return _svPIm(i);
+const ims=[V('mi'),...xs.map(x=>x.value)].map(x=>x.trim()).filter(Boolean),Q=N('mq')|0;
+if(ims.length>Q)return msg('Você digitou '+ims.length+' IMEIs, mas a quantidade é '+Q+'. Aumente a quantidade ou apague um IMEI.');
+const seen=new Set();for(const im of ims){const k=imN(im);if(seen.has(k))return msg('O IMEI '+im+' está repetido.');seen.add(k)}
+for(const x of xs){const im=x.value.trim();if(!im)continue;const d=imeiDup(im,p.id);if(d&&!confirm('Já existe um aparelho com o IMEI '+im+': '+d+'.\n\nSalvar mesmo assim?'))return}
+const s0=imSv;_svPIm(i);if(imSv==s0)return;
+const k=imSplit(i,ims);save();go();if(k>0)toast('Cadastro dividido: '+ims.length+' aparelho(s) com IMEI'+(Q>ims.length?' e '+(Q-ims.length)+' un. sem IMEI':'')+'.')};
 </script></body></html>
