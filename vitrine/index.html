@@ -496,6 +496,13 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
   .fti{max-width:1280px;padding:56px 32px calc(104px + env(safe-area-inset-bottom,0px))}
   .ftl{flex-direction:row;justify-content:space-between;align-items:center}
 }
+@media (min-width:1024px){
+  #hm [data-r=en]>section.enc{display:grid;grid-template-columns:auto 1fr auto;column-gap:24px;align-items:center;padding:28px 32px}
+  #hm [data-r=en] section.enc .ci{margin:0;grid-row:1/3}
+  #hm [data-r=en] section.enc h2{margin:0 0 4px;align-self:end}
+  #hm [data-r=en] section.enc p.sm{margin:0!important;align-self:start;max-width:64ch}
+  #hm [data-r=en] section.enc .btn{grid-column:3;grid-row:1/3;margin:0;align-self:center}
+}
 @media (min-width:1500px){.fti{max-width:1400px}}
 
 /* movimento: entrada suave ao rolar (sem JS, só onde o navegador suporta) */
