@@ -393,16 +393,17 @@ body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card)
 
 /* ===== PARTE DE BAIXO DA VITRINE =====
    Ritmo de 8px: 24px entre blocos, 32px dentro dos cartões (24px no celular).
-   Ordem: troca/encomenda > confiança > como comprar > perguntas > rodapé. */
+   Ordem: encomenda > confiança > como comprar > perguntas > rodapé. */
 body{padding-bottom:0}
 #hm>[data-r=bf],#hm>[data-r=st]{display:block}
+#hm>[data-r=tr]:empty{display:none}
 @media (max-width:1023px){#hm>[data-r=tr],#hm>[data-r=en]{display:block}}
 #hm [data-r=tr]{margin-top:40px}#hm [data-r=en]{margin-top:24px}
 #hm [data-r=bf],#hm [data-r=st]{margin-top:24px}
 #hm [data-r=st]>.stw,#hm [data-r=bf]>*{max-width:none;margin-left:0;margin-right:0}
 #steps,#faq,#trade{scroll-margin-top:84px}
 
-/* cartões de troca e encomenda */
+/* cartões de troca (página do produto) e encomenda */
 section.b.cd{display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:24px;border-radius:16px;transition:border-color .2s}
 section.b.cd:hover{border-color:var(--brbd)}
 .cd .ci{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--brand);margin-bottom:16px;flex:none}
@@ -455,10 +456,6 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
 .ftb{grid-column:1/-1}
 .ftb .wm{height:32px}.ftb .hn{display:block;font-size:17px}
 .ftb p{margin:12px 0 0;color:var(--mute);max-width:36ch;line-height:1.55}
-.fts{display:flex;gap:8px;margin-top:16px}
-#ft .fts a{width:40px;height:40px;min-height:40px;padding:0;justify-content:center;border:1px solid var(--bds);border-radius:var(--r-m);color:var(--brand);transition:background .15s,border-color .15s}
-#ft .fts a:hover{background:var(--soft);border-color:var(--brbd)}
-#ft .fts svg{display:block}
 #ft h3{font-size:14px;font-weight:600;margin:0 0 8px;color:var(--ink)}
 #ft ul{list-style:none;margin:0;padding:0}
 #ft li{display:block}
@@ -501,7 +498,7 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
 }
 @media (min-width:1500px){.fti{max-width:1400px}}
 
-/* movimento: uma entrada suave ao rolar até a faixa de confiança e os passos (sem JS, só onde o navegador suporta) */
+/* movimento: entrada suave ao rolar (sem JS, só onde o navegador suporta) */
 @keyframes rvl{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @supports (animation-timeline:view()){
   @media (prefers-reduced-motion:no-preference){
@@ -633,7 +630,7 @@ setR($('#pg'),!pgd?'':cfg.pagm==='pages'?`<div class="pgr"><button class="chip" 
 const g=$('#sg');if(g)setR(g,s?P.filter(m=>norm(m.n).includes(s)).slice(0,3).map(m=>`<button class="chip" data-sg="${X(m.n)}">${X(m.n)}</button>`).join(''):'')}
 const CX=()=>view.n==='prod'?((P.find(g=>g.id===view.id)||{}).c||''):fl.cat,iph=()=>{const c=CX();return !c||c==='apple'},faqL=()=>(cfg.faq||[]).filter(f=>!f[2]||!CX()||String(f[2]).toLowerCase()===CX()),encT=()=>iph()||!/modelo|iphone/i.test(cfg.enc)?cfg.enc:'Procurando outra marca, tom ou tamanho? Trazemos sob encomenda, com sinal e o restante na entrega.';
 const swR=(n,h)=>{const e=rg(n);if(!e)return;const ch=e.__h!==h;setR(e,h);if(ch&&!RM.matches){e.classList.remove('fi2');void e.offsetWidth;e.classList.add('fi2')}};
-function ctx(){if(view.n!=='home')return;setR(rg('hd'),hdH());swR('tb',tradeBan());swR('fl',flH());swR('tr',trade());swR('en',enc());swR('bf',benefits());swR('st',steps());bnr()}
+function ctx(){if(view.n!=='home')return;setR(rg('hd'),hdH());swR('tb',tradeBan());swR('fl',flH());swR('en',enc());swR('bf',benefits());swR('st',steps());bnr()}
 const tradeBan=()=>cfg.trade&&on.tradeban!==false&&iph()?`<button type="button" class="tban" data-tgo><span><b>Quanto vale o seu iPhone?</b><small>Use o seu como entrada e pague menos no próximo. Avaliação rápida pelo WhatsApp.</small></span><i>Avaliar meu iPhone ›</i></button>`:'';
 const trade=()=>{if(!cfg.trade||!iph())return '';return `<section class="b cd trc" id="trade"><div class="ci">${sx('swap',24)}</div><h2>Tem um iPhone para dar na troca?</h2><p class="sm">${X(cfg.trade)}</p>${on.tradef!==false?`<button type="button" class="btn sf trbtn" data-trsheet>Avaliar meu iPhone</button>`:`<a class="btn sf trbtn" target="_blank" rel="noopener" href="${wa('Olá! Quero avaliar meu iPhone usado como entrada em um produto da '+cfg.nome+'.')}" data-tk="troca">Avaliar meu iPhone</a>`}</section>`};
 function tradeUrl(){const s=window.__tr||{},bt=String(s.b||'').replace(/\D/g,''),pr=(s.p||[]).length?s.p.join(', '):'nenhum informado';return wa(`Olá! Quero avaliar meu ${s.m||'iPhone'} ${s.c||''}.\nSaúde da bateria: ${bt?bt+'%':'não informada'}.\nEstado: ${s.e||'não informado'}.\nProblemas: ${pr}.\nAcompanha a caixa: ${s.x||'não informado'}.`.replace(' .','.'))}
@@ -651,7 +648,7 @@ const flH=()=>{const sl2=(k,o,l)=>`<select data-sel="${k}" aria-label="${l}">${o
 const crH=()=>`<div class="cr"><span id="cn" aria-live="polite"></span>${on.filters?`<button class="chip" data-av aria-pressed="false">Só disponíveis</button>`:''}${on.view?`<div class="sg"><button data-view="g" aria-label="Grade" aria-pressed="false">${SV(IC.all,18)}</button><button data-view="l" aria-label="Lista" aria-pressed="false">${SV('<rect x="3.5" y="4" width="3.2" height="3.2" rx=".9"/><rect x="3.5" y="10.4" width="3.2" height="3.2" rx=".9"/><rect x="3.5" y="16.8" width="3.2" height="3.2" rx=".9"/><path d="M10.5 5.6h10M10.5 12h10M10.5 18.4h10"/>',18)}</button></div>`:''}</div>`;
 function mountHome(){const a=$('#app');if(!cfg.cats.length)return erro('Em breve novidades por aqui.');
 a.innerHTML=`<div id="hm"><div data-r="hd"></div><div data-r="sc"></div><div data-r="se"></div><div data-r="tb"></div><div class="hmc"><aside class="hsd"><div data-r="ct"></div><div data-r="fl"></div></aside><div class="hmm"><div data-r="cr"></div><div id="ls"></div><div id="pg"></div></div></div><div data-r="tr"></div><div data-r="en"></div><div data-r="bf"></div><div data-r="st"></div></div>`;
-setR(rg('hd'),hdH());setR(rg('sc'),scH());setR(rg('se'),seH());setR(rg('tb'),tradeBan());setR(rg('ct'),ctH());setR(rg('fl'),flH());setR(rg('cr'),crH());setR(rg('tr'),trade());setR(rg('en'),enc());setR(rg('bf'),benefits());setR(rg('st'),steps());const i=$('#q');if(i)i.value=q;tw()}
+setR(rg('hd'),hdH());setR(rg('sc'),scH());setR(rg('se'),seH());setR(rg('tb'),tradeBan());setR(rg('ct'),ctH());setR(rg('fl'),flH());setR(rg('cr'),crH());setR(rg('en'),enc());setR(rg('bf'),benefits());setR(rg('st'),steps());const i=$('#q');if(i)i.value=q;tw()}
 function sync(){$$('[data-cat]').forEach(b=>{const o=b.getAttribute('data-cat')===fl.cat;b.classList.toggle('on',o);b.setAttribute('aria-pressed',o)});$$('[data-sel]').forEach(s=>{const v=String(fl[s.dataset.sel]);if(s.value!==v)s.value=v});const av=$('[data-av]');if(av){av.classList.toggle('on',fl.av);av.setAttribute('aria-pressed',fl.av)}$$('[data-view]').forEach(b=>{const o=b.dataset.view===fl.view;b.classList.toggle('on',o);b.setAttribute('aria-pressed',o)})}
 /* ---------- painel de preço da página do produto (preço, desconto, Pix e cartão logo abaixo do título) ---------- */
 const CK='<path d="M5 12.5l4.5 4.5L19 7.5"/>';
