@@ -54,6 +54,34 @@ t('lista do WhatsApp (cabeçalho + linhas de cor): preço em dólar certo, 1TB l
   assert.equal(r, JSON.stringify([['iPhone 18 Pro Max','256GB','Preto',1390],['iPhone 18 Pro Max','1TB','Bordô',2100],['iPhone Air','256GB','Azul Céu',905],['iPhone 16 Pro Max','256GB','Titânio Deserto',1010]]));
   assert.equal(run(`seParse(${JSON.stringify(listaZap)}).bad.length`), 0);
 });
+const listaSn = `45971	IPHONE 14 128GB YELLOW ESIM (SWAP GRADO A) S/G 	298
+75220	IPHONE 14 256GB RED ESIM (SWAP GRADO A-) 	323
+75213	IPHONE 14 256GB RED ESIM (SWAP GRADO A) 	328
+45995	IPHONE 14 128GB YELLOW ESIM (SWAP GRADO B) S/G 	286
+73196	IPHONE 16 128GB LL BLACK (ESIM) (SWAP GRADO C) S/G 	540
+71680	IPHONE 16 128GB LL BLACK (ESIM) (SWAP GRADO A) S/G 	558
+71000	IPHONE 16 128GB LL PINK (ESIM) (SWAP GRADO A+) S/G 	570
+71001	IPHONE 16 128GB LL TEAL (ESIM) (SWAP GRADO A -) S/G 	560
+71002	IPHONE 16 128GB LL ULTRAMARINE (ESIM) (SWAP) S/G 	560
+65030	MACBOOK PRO I5 13.3 8/128GB MPXQ2LL/A 2017 GRAY (SWAP) 	195`;
+t('seminovos: só entra Grade A exata; A-, A+, B, C, sem grade e outros produtos ficam de fora', () => {
+  const r = JSON.parse(run(`JSON.stringify(seParseSn(${JSON.stringify(listaSn)}))`));
+  assert.deepEqual(r.rows.map(x => [x.m, x.cap, x.en, x.usd]), [['iPhone 14','128GB','YELLOW',298],['iPhone 14','256GB','RED',328],['iPhone 16','128GB','BLACK',558]]);
+  assert.equal(r.ig.am, 2); assert.equal(r.ig.b, 1); assert.equal(r.ig.c, 1); assert.equal(r.ig.out, 1); assert.equal(r.ig.sg, 1);
+  assert.equal(r.bad.length, 0);
+  assert.equal(run(`seParseSn('IPHONE 17 256GB BLACK ESIM GRADE A 784').rows.length`), 1);
+});
+t('seminovos: aceita linha sem código nem tabulação e ignora chip e região', () => {
+  const r = JSON.parse(run(`JSON.stringify(seParseSn('IPHONE 16 PRO MAX 256GB LL DESERT TITANIUM (SWAP GRADO A) S/G 814').rows)`));
+  assert.deepEqual(Object.keys(r[0]).sort(), ['cap','en','key','m','sn','usd']);
+  assert.equal(run(`seCor('iPhone 16 Pro Max','DESERT TITANIUM')`), 'Titânio Deserto');
+});
+t('seminovos vão para a vitrine como Seminovo, com margem e preço próprios', () => {
+  const sv = run(`JSON.stringify([S.se,S.cfg.fbank])`);
+  const out = JSON.parse(run(`S.se=undefined;const s=se();s.usd=5;s.marg={'iPhone 14':999};s.msn={'iPhone 14':200};s.it=[];s.sn=seParseSn(${JSON.stringify(listaSn)}).rows;S.cfg.fbank={'iphone 14|amarelo':['f'],'iphone 14|vermelho':['f']};JSON.stringify(seRows({pixb:true}).map(r=>[r.n,r.d,r.co,r.pr]))`));
+  run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
+  assert.deepEqual(out, [['iPhone 14','128GB Amarelo','Seminovo',1790],['iPhone 14','256GB Vermelho','Seminovo',1890]]);
+});
 t('Duo: cores traduzidas para Branco Estelar e Céu Noturno', () => {
   const c = run(`seParse(${JSON.stringify(lista)}).rows.filter(r=>r.m=='iPhone Duo').map(r=>seCor(r.m,r.en)).sort().join('|')`);
   assert.equal(c, 'Branco Estelar|Céu Noturno');

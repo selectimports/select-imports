@@ -21,3 +21,12 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - O card mostra pontinhos só das fotos do aparelho exibido.
 - "Criar encomenda" abre a nova encomenda já preenchida (preço de venda e custo estimado, que inclui a nota).
 - Nada de dólar, custo ou margem é publicado: a vitrine recebe só o preço final.
+
+## Seminovos (quadro separado)
+
+- A aba tem um segundo quadro, só para a lista de seminovos. Colar um quadro não apaga o outro.
+- Só entra o aparelho escrito exatamente como **Grade A** (`GRADO A` ou `GRADE A`). A-, A+, B, C, outras grades e linhas sem grade são descartadas, assim como produtos que não são iPhone.
+- O app lê modelo, capacidade, cor e preço em dólar (último número da linha). Código do fornecedor, chip, região e "S/G" são ignorados.
+- Mesmo modelo, capacidade e cor repetidos: fica o mais barato.
+- Preço do seminovo = a mesma fórmula dos lacrados (cotação, frete, nota e arredondamento), mas com **margem própria** ("Margem dos seminovos"). Sem margem ou sem foto, não vai para a vitrine.
+- Na vitrine, eles aparecem como Seminovo. O botão "Criar encomenda" existe só para os lacrados.
