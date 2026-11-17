@@ -35,7 +35,10 @@ iPhone Duo 256GB STARLIGHT eSIM 1700
 iPhone Duo 256GB NIGHT SKY eSIM 1700
 iPhone 16 128GB BLACK 600`;
 
-t('lê as linhas da lista', () => assert.equal(run(`seParse(${JSON.stringify(lista)}).rows.length`), 5));
+t('lê as linhas da lista; repetidos (mesmo modelo, capacidade e cor) ficam com o mais barato', () => {
+  assert.equal(run(`seParse(${JSON.stringify(lista)}).rows.length`), 4);
+  assert.equal(run(`seParse(${JSON.stringify(lista)}).rows.find(x=>x.m=='iPhone 18 Pro').usd`), 950);
+});
 const listaZap = `📱 *LISTA DE IPHONES*
 📅   17/11/2026
 👑 *IPHONE 18 PRO MAX* *256GB*
@@ -59,17 +62,32 @@ t('Duo está no Banco de fotos com as duas cores', () => {
   const d = run(`JSON.stringify(IPH.find(m=>m[1]=='iPhone Duo'))`);
   assert.ok(d.includes('Branco Estelar') && d.includes('Céu Noturno'));
 });
-t('mesmo modelo, capacidade e cor: só o mais barato na vitrine (chip não separa)', () => {
+t('mesmo modelo, capacidade e cor: fica só o mais barato (sem separar por região ou chip)', () => {
   run(`S.se=undefined;se().usd=5;se().frete=0;se().nota=1;se().marg={'iPhone 18 Pro':500,'iPhone Duo':800,'iPhone 16':300};se().it=seParse(${JSON.stringify(lista)}).rows;S.cfg.fbank={'iphone 18 pro|bordô':['f1'],'iphone duo|branco estelar':['f2'],'iphone duo|céu noturno':['f3'],'iphone 16|preto':['f4']};`);
   const r = run(`seRows({pixb:true})`);
   const p18 = r.filter(x => x.n === 'iPhone 18 Pro');
   assert.equal(p18.length, 1);
   assert.equal(p18[0].pr > 0, true);
-  assert.equal(run(`seVis().hid.size`), 1);
+  assert.equal(run(`new Set(se().it.map(x=>x.key)).size===se().it.length`), true);
 });
-t('a vitrine não recebe chip; recebe prazo e selo Anatel como campos próprios', () => {
+t('a vitrine não recebe chip; recebe prazo como campo próprio', () => {
   const r = run(`seRows({pixb:true})`);
-  r.forEach(x => { assert.equal(x.desc, ''); assert.ok(!/chip|esim/i.test(JSON.stringify(x))); assert.ok('prz' in x && 'an' in x); });
+  r.forEach(x => { assert.equal(x.desc, ''); assert.ok(!/chip|esim/i.test(JSON.stringify(x))); assert.ok('prz' in x); });
+});
+t('o app guarda só modelo, capacidade, cor e preço (sem chip, região nem código)', () => {
+  const r = JSON.parse(run(`JSON.stringify(seParse(${JSON.stringify(listaZap)}).rows)`));
+  r.forEach(x => assert.deepEqual(Object.keys(x).sort(), ['cap','en','key','m','usd']));
+});
+t('o código do produto não muda quando muda a região mais barata', () => {
+  const L = r => `👑 *IPHONE 18 PRO MAX* *256GB*\n🖤 Black | ${r} | $1.390`;
+  const id = r => run(`S.se=undefined;se().usd=5;se().marg={'iPhone 18 Pro Max':500};se().it=seParse(${JSON.stringify(L(r))}).rows;S.cfg.fbank={'iphone 18 pro max|preto':['f']};seRows({pixb:true})[0].id`);
+  const sv = run(`JSON.stringify([S.se,S.cfg.fbank])`);
+  const a = id('LL/A'), b = id('HN/A');
+  run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
+  assert.equal(a, b);
+});
+t('lê a data escrita na lista', () => {
+  assert.equal(run(`seParse(${JSON.stringify(listaZap)}).date`), '2026-11-17');
 });
 t('sem foto no banco: não vai para a vitrine, a menos que a opção esteja ligada', () => {
   run(`S.cfg.fbank={'iphone duo|branco estelar':['f2']}`);

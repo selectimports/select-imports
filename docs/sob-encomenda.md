@@ -12,8 +12,10 @@ A lista pode vir em dois estilos: tudo numa linha (modelo, capacidade, cor e pre
 
 Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%), arredondado para cima.
 
-- Itens iguais (mesmo modelo, capacidade e cor) com preços diferentes por região ou chip: a vitrine mostra só o mais barato.
-- Códigos (A####, região) e chip ficam só no app. A vitrine mostra o selo Anatel e o prazo, em um quadro próprio.
+- O app guarda só o essencial de cada linha: modelo, capacidade, cor e preço em dólar. Chip, região e código do aparelho são ignorados.
+- Itens iguais (mesmo modelo, capacidade e cor) com preços diferentes: fica só o mais barato.
+- A vitrine mostra o prazo de entrega em um quadro próprio. O link de cada produto usa só modelo, capacidade e cor, então não muda de um dia para o outro.
+- A data escrita na lista (📅) é lida; se não for a de hoje, o app avisa.
 - Fotos vêm do **Banco de fotos** (por modelo e cor). Aparelho sem foto no banco **não vai para a vitrine**, a menos que você ligue "Publicar também aparelhos sem foto".
 - Na vitrine, Sob encomenda tem entrada própria (fora dos círculos de categorias) e o botão da página do produto diz só "Quero encomendar".
 - O card mostra pontinhos só das fotos do aparelho exibido.
