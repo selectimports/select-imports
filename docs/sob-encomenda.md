@@ -8,6 +8,8 @@ No app: **Mais → Catálogo → Sob encomenda**.
 4. A **margem fica salva** por modelo até você mudar. Se o modelo sair da lista e voltar dias depois, a última margem volta junto (e aparece em "Salvas, fora da lista de hoje").
 5. Marque cada item como **Novo (lacrado)** ou **Seminovo** (a marcação fica salva entre listas).
 
+A lista pode vir em dois estilos: tudo numa linha (modelo, capacidade, cor e preço) ou com **cabeçalho** de modelo + capacidade e uma linha por cor embaixo (`Cor | região | $preço`). Nesse segundo estilo, cada linha de cor precisa ter `$` ou `|`. Confira sempre a contagem de aparelhos lidos antes de confirmar.
+
 Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%), arredondado para cima.
 
 - Itens iguais (mesmo modelo, capacidade e cor) com preços diferentes por região ou chip: a vitrine mostra só o mais barato.

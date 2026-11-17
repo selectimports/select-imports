@@ -36,6 +36,21 @@ iPhone Duo 256GB NIGHT SKY eSIM 1700
 iPhone 16 128GB BLACK 600`;
 
 t('lê as linhas da lista', () => assert.equal(run(`seParse(${JSON.stringify(lista)}).rows.length`), 5));
+const listaZap = `📱 *LISTA DE IPHONES*
+📅   17/11/2026
+👑 *IPHONE 18 PRO MAX* *256GB*
+🖤 Black | LL/A | $1.390
+👑 *IPHONE 18 PRO MAX* *1TB*
+🍷 Burgundy | LL/A | $2.100
+📱 *iPhone AIR 256GB*
+💙 Blue | AJ/ | $905
+🍂*IPHONE 16 PRO MAX* *256gb*
+  🩶Desert LL/A | $1010`;
+t('lista do WhatsApp (cabeçalho + linhas de cor): preço em dólar certo, 1TB lido, capacidade não vira preço', () => {
+  const r = run(`JSON.stringify(seParse(${JSON.stringify(listaZap)}).rows.map(x=>[x.m,x.cap,seCor(x.m,x.en),x.usd]))`);
+  assert.equal(r, JSON.stringify([['iPhone 18 Pro Max','256GB','Preto',1390],['iPhone 18 Pro Max','1TB','Bordô',2100],['iPhone Air','256GB','Azul Céu',905],['iPhone 16 Pro Max','256GB','Titânio Deserto',1010]]));
+  assert.equal(run(`seParse(${JSON.stringify(listaZap)}).bad.length`), 0);
+});
 t('Duo: cores traduzidas para Branco Estelar e Céu Noturno', () => {
   const c = run(`seParse(${JSON.stringify(lista)}).rows.filter(r=>r.m=='iPhone Duo').map(r=>seCor(r.m,r.en)).sort().join('|')`);
   assert.equal(c, 'Branco Estelar|Céu Noturno');
