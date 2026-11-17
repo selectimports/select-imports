@@ -521,12 +521,10 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
 .sobt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}.sobt b{font-weight:600;font-size:15px;color:var(--ink)}.sobt small{font-size:12.5px;color:var(--mute)}
 .sobc{flex:none;color:var(--mute);display:grid;transition:transform .18s ease,color .16s ease}.sobe:hover .sobc{transform:translateX(2px);color:var(--brand)}
 .sobe.on{border-color:var(--btn);background:var(--soft)}.sobe.on .sobi{background:var(--btn);color:#fff}.sobe.on .sobc{color:var(--brand)}
-.sobh{display:flex;flex-direction:column;gap:12px;align-items:flex-start;padding:16px;margin:0 0 14px;border:1px solid var(--brbd);border-radius:var(--r-l);background:var(--soft)}
+.sobh{display:flex;flex-direction:column;gap:8px;padding:12px 16px;margin:0 0 14px;border:1px solid var(--brbd);border-radius:var(--r-l);background:var(--soft)}
+.sobn{margin:0;font-size:13.5px;line-height:1.4;color:var(--mute)}
 .sobh[hidden]{display:none}
-.sobx{display:flex;gap:12px;align-items:flex-start}.sobx .sobi{background:var(--btn);color:#fff}
-.sobx h2{font-size:18px;line-height:1.25;margin:0 0 2px}.sobx p{margin:0;font-size:14px;color:var(--mute);line-height:1.45;max-width:56ch}
 .sobp{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink)}.sobp svg{flex:none;color:var(--brand)}.sobp b{font-weight:600}
-.sobv{margin:0}
 @media (prefers-reduced-motion:no-preference){.sobh:not([hidden]){animation:up .28s ease-out both}}
 .prz{margin:0 0 14px;padding:12px 14px;border:1px solid var(--brbd);border-radius:var(--r-l);background:var(--soft);display:flex;flex-direction:column;gap:10px}
 .przr{display:flex;align-items:center;gap:12px}.przi{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:var(--r-m);background:var(--btn);color:#fff}
@@ -534,7 +532,7 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
 .przs{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);padding-top:10px;border-top:1px solid var(--brbd)}.przs svg{flex:none;stroke-width:2.2;color:var(--ok)}
 .prz:has(.przr):not(:has(.przs)){padding-bottom:12px}.prz:not(:has(.przr)){padding:10px 14px}.prz:not(:has(.przr)) .przs{padding-top:0;border:0}
 @media (prefers-reduced-motion:no-preference){.prz{animation:up .28s ease-out both}}
-@media (min-width:1024px){.sobe{padding:10px 10px;margin:0 0 16px;border-color:transparent;background:none}.sobe:hover{background:var(--soft)}.sobe.on{border-color:transparent}.sobe .sobi{width:34px;height:34px}.sobt small{display:none}.sobt b{font-weight:500;font-size:14.5px}.sobe.on .sobt b{font-weight:600;color:var(--brand)}.sobc{display:none}.sobh{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}.sobx{flex:1 1 360px}.sobh .sobp{order:3}}
+@media (min-width:1024px){.sobe{padding:10px 10px;margin:0 0 16px;border-color:transparent;background:none}.sobe:hover{background:var(--soft)}.sobe.on{border-color:transparent}.sobe .sobi{width:34px;height:34px}.sobt small{display:none}.sobt b{font-weight:500;font-size:14.5px}.sobe.on .sobt b{font-weight:600;color:var(--brand)}.sobc{display:none}}
 
 /* Sob encomenda no topo (abaixo da busca): destaque igual ao do banner "Quanto vale o seu iPhone?" */
 .sobg{display:none}
@@ -688,7 +686,7 @@ const scH=()=>on.shortcuts?`<div class="chips sc">${cfg.insta?`<a class="chip" h
 const seH=()=>on.search?`<input type="search" id="q" placeholder="Digite o nome do produto..." aria-label="Buscar produto" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="chips" id="sg"></div>`:'';
 const hasSob=()=>P.some(m=>m.c==='sob'),SOB_I='<path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/>';
 const sobE=()=>hasSob()?`<button type="button" class="sobe" data-cat="sob" aria-pressed="false"><span class="sobi">${SV(SOB_I,22)}</span><span class="sobt"><b>Sob encomenda</b><small>Escolha modelo, cor e capacidade</small></span><span class="sobc">${si('chr',18)}</span><i class="sobg">Ver opções ›</i></button>`:'';
-const sobH=()=>hasSob()?`<section class="sobh" id="sobh" hidden><div class="sobx"><span class="sobi">${SV(SOB_I,22)}</span><div><h2>Sob encomenda</h2><p>Escolha o modelo, a capacidade e a cor. Confirme com um sinal e acompanhe tudo pelo WhatsApp.</p></div></div>${cfg.sob&&cfg.sob.prazo?`<div class="sobp">${SV(PZ_T,18)}<span>Prazo de entrega: <b>${X(cfg.sob.prazo)}</b></span></div>`:''}<button type="button" class="chip sobv" data-cat="">${si('chl',16)}Todos os produtos</button></section>`:'';
+const sobH=()=>hasSob()?`<section class="sobh" id="sobh" hidden><p class="sobn">Escolha modelo, capacidade e cor e finalize pelo WhatsApp.</p>${cfg.sob&&cfg.sob.prazo?`<div class="sobp">${SV(PZ_T,18)}<span>Prazo de entrega: <b>${X(cfg.sob.prazo)}</b></span></div>`:''}</section>`:'';
 const ctH=()=>on.cats?`<div class="cats">${[{id:'',nome:'Todos'},...cfg.cats].map(c=>`<button class="ct" data-cat="${X(c.id)}" aria-pressed="false"><div class="cc">${ic(c.id||'todos')}</div>${X(c.nome)}</button>`).join('')}</div>`:'';
 const KL={fonte:'Fontes',cabo:'Cabos',magsafe:'Carregadores sem fio',fone:'Fones',capa:'Capas',pelicula:'Películas',outro:'Outros'},kinds=()=>fl.cat==='acess'?[...new Set(P.filter(m=>m.c==='acess').flatMap(m=>m.v.map(x=>x.ak)).filter(Boolean))]:[];
 const flH=()=>{const sl2=(k,o,l)=>`<select data-sel="${k}" aria-label="${l}">${o.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select>`;return on.filters||on.sort||kinds().length>1?`<div class="fr">${kinds().length>1?sl2('kind',[['','Tipo'],...kinds().map(k=>[k,KL[k]||k])],'Tipo de acessório'):''}${on.filters&&iph()?sl2('cond',[['','Condição'],['Novo','Novo'],['Seminovo','Seminovo']],'Condição'):''}${on.sort?sl2('sort',[['rel','Relevância'],['pm','Menor preço'],['pM','Maior preço'],['az','A–Z'],['za','Z–A'],['nv','Mais recentes']],'Ordenar por'):''}${on.filters?sl2('price',iph()?[[0,'Qualquer preço'],[200,'Até R$ 200'],[500,'Até R$ 500'],[1000,'Até R$ 1.000'],[3000,'Até R$ 3.000'],[5000,'Até R$ 5.000'],[8000,'Até R$ 8.000'],[12000,'Até R$ 12.000'],[20000,'Até R$ 20.000']]:[[0,'Qualquer preço'],[50,'Até R$ 50'],[100,'Até R$ 100'],[200,'Até R$ 200'],[500,'Até R$ 500'],[1000,'Até R$ 1.000'],[2000,'Até R$ 2.000'],[5000,'Até R$ 5.000']],'Preço máximo'):''}</div>`:''};
