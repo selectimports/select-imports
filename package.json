@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "check": "node scripts/check.mjs",
+    "teste": "node scripts/teste-sob-encomenda.mjs",
     "start": "npx --yes serve . -l 3000"
   },
   "engines": { "node": ">=18" }
