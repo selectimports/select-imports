@@ -191,4 +191,14 @@ t('vitrine: contagem, "Só disponíveis" e botões de grade/lista ficam numa lin
   assert.ok(vit.includes("#cn{white-space:nowrap;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}.cr .chip,.cr .sg{flex:none}"));
   assert.ok(!vit.includes('class="exb"'));                                         /* contagem curta: "12 de 26 produtos" */
 });
+t('vitrine refinada: Filtrar ao lado da busca, selo na foto, sem rótulo repetido na Sob encomenda', () => {
+  assert.ok(vit.includes('data-ftog') && vit.includes('#hm:not(.fo) [data-r=fl]{display:none}'));   /* filtros atrás do botão no celular */
+  assert.ok(vit.includes('<span class=\"cdb\">'));                                                   /* Novo/Seminovo como selo na foto */
+  assert.ok(vit.includes("if(fl.cat!=='sob')b+='<span class=\"bd\">Sob encomenda</span>'"));        /* sem "Sob encomenda" repetido nos cards da aba */
+  assert.ok(!vit.includes('Escolha modelo, capacidade e cor e finalize pelo WhatsApp'));             /* sem texto duplicado */
+});
+t('app: dólar com padrão brasileiro e Criar encomenda como botão principal', () => {
+  assert.equal(run(`seUS(1275)`), '1.275,00'); assert.equal(run(`seUS(1275.5)`), '1.275,50');
+  assert.ok(app.includes('onclick=\"seEnc(${i})\">Criar encomenda</button><button class=g2 onclick=\"seCo(${i})\"'));
+});
 console.log(`\n${ok} testes ok${process.exitCode ? ', com falhas' : ''}.`);
