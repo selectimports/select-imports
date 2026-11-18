@@ -55,7 +55,7 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 ## Refinamento visual (vitrine e app)
 
 - **Vitrine:** no celular, só busca e categorias ficam à mostra; o botão **Filtrar** (ao lado da busca) abre e fecha os filtros e fica destacado quando há filtro ativo. A faixa Sob encomenda ficou fina, com título manuscrito (fonte do sistema do iPhone).
-- **Cards:** Novo/Seminovo viram selo na foto; foto sempre no mesmo quadro neutro e sem cortes; os cards sobem de leve ao passar o dedo/mouse e entram com uma animação suave (desligada para quem usa "reduzir movimento").
+- **Cards:** Novo/Seminovo viram selo na foto; foto no quadro inteiro, com fundo branco como antes; coração de favoritar e setas das fotos pequenos, para a foto ficar limpa; os cards sobem de leve ao passar o dedo/mouse e entram com uma animação suave (desligada para quem usa "reduzir movimento").
 - **Aba Sob encomenda:** um só aviso de entrega, sem repetir "Sob encomenda" em cada card.
 - **WhatsApp:** botão menor, esconde ao rolar para baixo e depois de 2 segundos parado; a página ganhou espaço no fim.
 - **App:** valores em dólar no padrão brasileiro (US$ 1.275,00) e "Criar encomenda" como botão principal.

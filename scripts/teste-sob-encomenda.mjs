@@ -193,7 +193,10 @@ t('vitrine: contagem, "Só disponíveis" e botões de grade/lista ficam numa lin
 });
 t('vitrine refinada: Filtrar ao lado da busca, selo na foto, sem rótulo repetido na Sob encomenda', () => {
   assert.ok(vit.includes('data-ftog') && vit.includes('#hm:not(.fo) [data-r=fl]{display:none}'));   /* filtros atrás do botão no celular */
-  assert.ok(vit.includes('<span class=\"cdb\">'));                                                   /* Novo/Seminovo como selo na foto */
+  assert.ok(vit.includes('<span class=\"cdb\">'));
+  assert.ok(vit.includes('.qr{display:flex;gap:8px;align-items:stretch;') && vit.includes('.qr .chip{flex:none;min-height:44px}'));   /* Filtrar na mesma altura da busca e dos outros botões */
+  assert.ok(!vit.includes('.card .art{background:var(--soft)}'));                                  /* fundo da foto não é mais rosa */
+  assert.ok(vit.includes('.card .fv{width:30px;height:30px') && vit.includes('.card .ar{width:22px;height:22px'));   /* coração e setas pequenos */                                                   /* Novo/Seminovo como selo na foto */
   assert.ok(vit.includes("if(fl.cat!=='sob')b+='<span class=\"bd\">Sob encomenda</span>'"));        /* sem "Sob encomenda" repetido nos cards da aba */
   assert.ok(!vit.includes('Escolha modelo, capacidade e cor e finalize pelo WhatsApp'));             /* sem texto duplicado */
 });
