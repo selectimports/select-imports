@@ -773,16 +773,19 @@ body:has(#sb-login) .rdg{display:none!important}
 .sob-mh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--bd)}
 .sob-mh h3{margin:0;font-size:16px;font-weight:600;letter-spacing:-.01em;min-width:0}
 .sob-mg{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx2);flex:none}
-.sob-in{position:relative;display:block}.sob-in i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px;color:var(--tx3);pointer-events:none}
-.sob .sob-in input{width:108px;min-height:38px;margin:0;padding:0 10px 0 32px;text-align:right;font-size:15px}
+.sob-in{position:relative;display:block}.sob-in i{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-style:normal;font-size:12px;color:var(--tx3);pointer-events:none}
+.sob .sob-in input{width:84px;min-height:34px;margin:0;padding:0 9px 0 28px;text-align:right;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
 .sob-in.need input{border-color:var(--wn);background:var(--wn-bg)}
-.sob-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:12px 14px}
+.sob-r{display:flex;flex-direction:column;gap:10px;padding:14px}
 .sob-r+.sob-r,.sob-more .sob-r{border-top:1px solid var(--bd)}
 .sob-n{display:flex;align-items:center;gap:8px;min-width:0;font-size:15px;font-weight:500}.sob-n span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sob-dot{flex:none;width:7px;height:7px;border-radius:50%;background:var(--ok)}.sob-dot.wn{background:var(--wn)}.sob-dot.mu{background:var(--tx3)}
-.sob-pr{font-size:17px;font-weight:600;text-align:right;white-space:nowrap}
-.sob-meta{grid-column:1/-1;font-size:12.5px;line-height:1.45;color:var(--tx2);overflow-wrap:anywhere}
-.sob-ra{grid-column:1/-1;display:flex;gap:8px;margin-top:10px}.sob-ra .sob-go{flex:1}
+.sob-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.sob-pr{font-size:18px;font-weight:700;letter-spacing:-.01em;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sob-fin{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);align-items:stretch;border:1px solid var(--bd);border-radius:var(--r-m);background:var(--surf2)}.sob-fin.one{grid-template-columns:auto}
+.sob-c{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;padding:8px 12px}.sob-c+.sob-c{border-left:1px solid var(--bd)}
+.sob-k{font-size:11.5px;line-height:1;color:var(--tx2)}.sob-v{font-size:14px;font-weight:600;line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums}.sob-v.ok{color:var(--ok)}
+.sob-st{margin:-2px 0 0;font-size:12.5px;line-height:1.4;color:var(--tx2)}
+.sob-ra{display:flex;gap:8px}.sob-ra .sob-go{flex:1}
 .sob-r.off{opacity:.62}.sob-r.off .sob-pr{font-weight:500}
 .sob-tg{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;border:0;border-top:1px solid var(--bd);background:var(--surf2);color:var(--br-tx);font-size:14px;font-weight:500;cursor:pointer}
 .sob-tg .t2{display:none}.sob-m.open .sob-tg .t1{display:none}.sob-m.open .sob-tg .t2{display:inline}.sob-m.open .sob-tg .sob-chv{transform:rotate(-135deg) translate(-1px,-1px)}
@@ -795,8 +798,8 @@ body:has(#sb-login) .rdg{display:none!important}
 .sob-sub summary{cursor:pointer;padding:8px 0;font-weight:500;list-style:none}.sob-sub{border-top:1px solid var(--bd);padding-top:4px}.sob-sub .sob-sv{margin-top:8px}
 .sob-bad{display:block;color:var(--tx2)}.sob-fx{color:var(--tx2)}
 .sob-pub{display:block;width:100%;min-height:48px;margin:14px 0 4px;font-size:15px}
-.sob-u{display:inline-flex;align-items:center;gap:4px;margin:0;font-size:12.5px;font-weight:400;color:var(--tx2)}
-.sob .sob-u input{width:92px;min-height:30px;margin:0;padding:0 8px;font-size:13px;text-align:right;background:transparent;border-color:var(--bd)}
+.sob-u{position:relative;display:block;margin:0;font-size:12px;font-weight:400;color:var(--tx3)}.sob-u i{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-style:normal;font-size:11.5px;pointer-events:none}
+.sob .sob-u input{width:78px;min-height:32px;margin:0;padding:0 8px 0 30px;font-size:14px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums;background:var(--surf)}
 .sob-paste .sob-btn{width:100%;margin:0 0 8px}.sob-paste small.sob-fx{display:block}
 @media (min-width:560px){.sob-bar{grid-template-columns:minmax(0,260px) 1fr;align-items:start;column-gap:20px}.sob-list{padding:0 0 0 20px;border-top:0;border-left:1px solid var(--bd);min-height:100%}.sob-paste{grid-column:1/-1}}
 @media (min-width:900px){.sob-ms{grid-template-columns:repeat(2,minmax(0,1fr))}.sob-pub{width:auto;min-width:260px;margin-left:auto}}
@@ -950,7 +953,7 @@ nv=s.on?[...seVis().pub.map(i=>s.it[i]),...s.sn].filter(x=>sePr(x)>0&&(s.semFoto
 sw=(on,fn,t,h)=>`<label class=sob-sw><input type=checkbox ${on?'checked':''} onchange="${fn}"><i></i><span>${t}${h?'<small>'+h+'</small>':''}</span></label>`,
 st=(x,i,sn)=>{if(!sn&&hid.has(i))return ['mu','Repetido, oculto (vale o mais barato)'];if((sn?seMgS(x.m):seMg(x.m))===null)return ['wn',''];if(!(seUsd(x)>0))return ['wn','Sem cotação'];if(!seFoto(x)&&!s.semFoto)return ['wn','Sem foto no banco, oculto'];return s.on?['ok','']:['mu','Aba desligada']},
 row=(x,i,sn)=>{const pr=sePr(x),cost=seCost(x),lu=pr>0?r2c(pr*f-cost):0,[k,t]=st(x,i,sn),dup=!sn&&hid.has(i);
-return `<div class="sob-r${dup?' off':''}"><div class=sob-n><i class="sob-dot ${k}"></i><span>${E(x.cap)} · ${E(seCor(x.m,x.en))}</span></div><b class=sob-pr>${pr>0?R(pr):'—'}</b><div class=sob-meta><label class=sob-u>US$<input type=number step=.01 inputmode=decimal value="${x.usd}" onchange="seUsdSet(${i},${sn?1:0},this.value)" aria-label="Preço em dólar de ${E(x.cap)} ${E(seCor(x.m,x.en))}"></label>${seUsd(x)>0&&pr>0?' · custo '+R(cost)+' · lucro '+R(lu):''}${t?` · <span class="sob-s ${k}">${t}</span>`:''}</div>${!sn&&!dup&&pr>0?`<div class=sob-ra><button type=button class=sob-pill onclick="seCo(${i})">${s.co[x.key]=='Seminovo'?'Seminovo':'Novo (lacrado)'}</button><button type=button class=sob-go onclick="seEnc(${i})">Criar encomenda</button></div>`:''}</div>`},
+return `<div class="sob-r${dup?' off':''}"><div class=sob-top><div class=sob-n><i class="sob-dot ${k}"></i><span>${E(x.cap)} · ${E(seCor(x.m,x.en))}</span></div><b class=sob-pr>${pr>0?R(pr):'—'}</b></div><div class="sob-fin${seUsd(x)>0&&pr>0?'':' one'}"><div class=sob-c><span class=sob-k>Dólar</span><label class=sob-u><i>US$</i><input type=number step=.01 inputmode=decimal value="${x.usd}" onchange="seUsdSet(${i},${sn?1:0},this.value)" aria-label="Preço em dólar de ${E(x.cap)} ${E(seCor(x.m,x.en))}"></label></div>${seUsd(x)>0&&pr>0?`<div class=sob-c><span class=sob-k>Custo</span><b class=sob-v>${R(cost)}</b></div><div class=sob-c><span class=sob-k>Lucro</span><b class="sob-v ok">${R(lu)}</b></div>`:''}</div>${t?`<p class="sob-st sob-s ${k}">${t}</p>`:''}${!sn&&!dup&&pr>0?`<div class=sob-ra><button type=button class=sob-pill onclick="seCo(${i})">${s.co[x.key]=='Seminovo'?'Seminovo':'Novo (lacrado)'}</button><button type=button class=sob-go onclick="seEnc(${i})">Criar encomenda</button></div>`:''}</div>`},
 mcard=(m,k,rows,mg,sn)=>{const o=(window.__seOpen||{})[k],rest=rows.slice(1);
 return `<article class="sob-m${o?' open':''}" data-k="${E(k)}"><div class=sob-mh><h3>${E(m)}</h3><label class=sob-mg>Margem<span class="sob-in${mg===null?' need':''}"><i>R$</i><input type=number step=.01 inputmode=decimal placeholder="definir" value="${mg===null?'':mg}" data-m="${E(m)}"${sn?' data-sn="1"':''} onchange="seMgSet(this)" aria-label="Margem de ${E(m)}"></span></label></div>${rows[0]}${rest.length?`<div class=sob-more><div>${rest.join('')}</div></div><button type=button class=sob-tg aria-expanded="${!!o}" data-k="${E(k)}" onclick="seTg(this.dataset.k)"><span class=t1>Ver mais ${rest.length} ${rest.length>1?'opções':'opção'}</span><span class=t2>Minimizar</span><i class=sob-chv></i></button>`:''}</article>`},
 cmp=(a,b)=>seCapN(a.cap)-seCapN(b.cap)||a.usd-b.usd,
