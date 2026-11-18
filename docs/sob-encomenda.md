@@ -33,7 +33,6 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 
 ## Vitrine e tela do app (novidades)
 
-- Na aba Sob encomenda da vitrine, o botão "Só disponíveis" dá lugar a dois botões: **Novos** e **Seminovos**. Tocar de novo no botão ativo volta a mostrar tudo. Nas outras abas o "Só disponíveis" continua igual.
 - No app, cada modelo mostra só a primeira opção e tem o botão "Ver mais N opções" / "Minimizar".
 - O quadro de colar a lista de seminovos fica logo abaixo do quadro dos lacrados, e a margem dos seminovos aparece logo abaixo dele depois que a lista é lida.
 

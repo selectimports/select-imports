@@ -186,11 +186,4 @@ t('botão de encomendar não leva valor nem Pix', () => {
   assert.ok(vit.includes("x.disp!='esgotado'&&x.disp!='enc'?"));
   assert.ok(!/Quero encomendar.{0,80}no Pix/.test(vit));
 });
-t('vitrine: na aba Sob encomenda o botão "Só disponíveis" dá lugar a Novos e Seminovos', () => {
-  assert.ok(vit.includes('data-av aria-pressed="false">Só disponíveis</button><div class="sobc" id="sobc" hidden>'));
-  assert.ok(vit.includes('data-sc="Novo" aria-pressed="false">Novos</button>') && vit.includes('data-sc="Seminovo" aria-pressed="false">Seminovos</button>'));
-  assert.ok(vit.includes("if(a)a.hidden=so;if(c)c.hidden=!so"));            /* sob: mostra Novos/Seminovos e esconde Só disponíveis; outras abas: o contrário */
-  assert.ok(vit.includes("fl.cond=fl.cond===c?'':c"));                         /* tocar de novo no botão ativo volta a mostrar tudo */
-  assert.ok(vit.includes("(!fl.av||fl.cat==='sob'||gdisp(m)!='esgotado')"));   /* Só disponíveis de outra aba não esconde nada na sob encomenda */
-});
 console.log(`\n${ok} testes ok${process.exitCode ? ', com falhas' : ''}.`);
