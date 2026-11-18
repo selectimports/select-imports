@@ -30,3 +30,15 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - Mesmo modelo, capacidade e cor repetidos: fica o mais barato.
 - Preço do seminovo = a mesma fórmula dos lacrados (cotação, frete, nota e arredondamento), mas com **margem própria** ("Margem dos seminovos"). Sem margem ou sem foto, não vai para a vitrine.
 - Na vitrine, eles aparecem como Seminovo. O botão "Criar encomenda" existe só para os lacrados.
+
+## Vitrine e tela do app (novidades)
+
+- Na aba Sob encomenda da vitrine, o botão "Só disponíveis" dá lugar a dois botões: **Novos** e **Seminovos**. Tocar de novo no botão ativo volta a mostrar tudo. Nas outras abas o "Só disponíveis" continua igual.
+- No app, cada modelo mostra só a primeira opção e tem o botão "Ver mais N opções" / "Minimizar".
+- O quadro de colar a lista de seminovos fica logo abaixo do quadro dos lacrados, e a margem dos seminovos aparece logo abaixo dele depois que a lista é lida.
+
+## O que mudou desde a última lista
+
+- Ao colar uma lista nova (novos ou seminovos), o app compara com a anterior por modelo, capacidade e cor e guarda: o que entrou, o que saiu, o que subiu e o que desceu de preço em dólar.
+- O resultado aparece em um quadro logo abaixo do quadro de colar, com a data da lista anterior, e fica até a próxima colagem. A primeira lista não tem comparação.
+- Os seminovos mantêm a mesma garantia dos demais, usam as fotos do Banco de fotos e aparecem na vitrine só como "Seminovo", sem a grade.

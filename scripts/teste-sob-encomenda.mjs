@@ -82,6 +82,26 @@ t('seminovos vão para a vitrine como Seminovo, com margem e preço próprios', 
   run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
   assert.deepEqual(out, [['iPhone 14','128GB Amarelo','Seminovo',1790],['iPhone 14','256GB Vermelho','Seminovo',1890]]);
 });
+t('o que mudou: entraram, saíram, subiram e desceram desde a última lista', () => {
+  const d = JSON.parse(run(`JSON.stringify(seDiff(
+    [{m:'iPhone 16',cap:'128GB',en:'BLACK',usd:730},{m:'iPhone 16',cap:'128GB',en:'PINK',usd:735},{m:'iPhone 17',cap:'256GB',en:'BLUE',usd:875},{m:'iPhone 15',cap:'128GB',en:'BLUE',usd:640}],
+    [{m:'iPhone 16',cap:'128GB',en:'BLACK',usd:740},{m:'iPhone 16',cap:'128GB',en:'PINK',usd:735},{m:'iPhone 17',cap:'256GB',en:'BLUE',usd:860},{m:'iPhone 17',cap:'256GB',en:'WHITE',usd:875}],123))`));
+  assert.deepEqual(d.add.map(x => x.en), ['WHITE']);
+  assert.deepEqual(d.del.map(x => x.m), ['iPhone 15']);
+  assert.deepEqual(d.up.map(x => [x.en, x.from, x.usd]), [['BLACK', 730, 740]]);
+  assert.deepEqual(d.dn.map(x => [x.en, x.from, x.usd]), [['BLUE', 875, 860]]);
+  assert.equal(d.since, 123);
+});
+t('o que mudou: lista salva no formato antigo (com região) não gera mudança falsa', () => {
+  const d = JSON.parse(run(`JSON.stringify(seDiff([{m:'iPhone 16',cap:'128GB',en:'BLACK',usd:730,reg:'HN/A',chip:'esim',key:'a|b|c|d|e|f|g'}],[{m:'iPhone 16',cap:'128GB',en:'BLACK',usd:730,key:'iPhone 16|128GB|BLACK'}],1))`));
+  assert.equal(d.add.length + d.del.length + d.up.length + d.dn.length, 0);
+});
+t('o que mudou: seApply e seApplySn guardam a comparação; primeira lista não tem comparação', () => {
+  const sv = run(`JSON.stringify([S.se,S.cfg.fbank])`);
+  const r = JSON.parse(run(`S.se=undefined;seApply({rows:seParse('IPHONE 16 128GB BLACK 700').rows,bad:[]});const a=se().dif;seApply({rows:seParse('IPHONE 16 128GB BLACK 710\\nIPHONE 17 256GB BLACK 800').rows,bad:[]});const b=se().dif;seApplySn({rows:seParseSn('IPHONE 14 128GB YELLOW (SWAP GRADO A) 298').rows,ig:{},bad:[]});const c=se().difSn;seApplySn({rows:seParseSn('IPHONE 14 128GB YELLOW (SWAP GRADO A) 290').rows,ig:{},bad:[]});JSON.stringify([a,b&&[b.add.length,b.up.length],c,se().difSn.dn.length])`));
+  run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
+  assert.deepEqual(r, [null, [1, 1], null, 1]);
+});
 t('Duo: cores traduzidas para Branco Estelar e Céu Noturno', () => {
   const c = run(`seParse(${JSON.stringify(lista)}).rows.filter(r=>r.m=='iPhone Duo').map(r=>seCor(r.m,r.en)).sort().join('|')`);
   assert.equal(c, 'Branco Estelar|Céu Noturno');
@@ -156,5 +176,12 @@ t('prazo e Anatel chegam ao produto', () => {
 t('botão de encomendar não leva valor nem Pix', () => {
   assert.ok(vit.includes("x.disp!='esgotado'&&x.disp!='enc'?"));
   assert.ok(!/Quero encomendar.{0,80}no Pix/.test(vit));
+});
+t('vitrine: na aba Sob encomenda o botão "Só disponíveis" dá lugar a Novos e Seminovos', () => {
+  assert.ok(vit.includes('data-av aria-pressed="false">Só disponíveis</button><div class="sobc" id="sobc" hidden>'));
+  assert.ok(vit.includes('data-sc="Novo" aria-pressed="false">Novos</button>') && vit.includes('data-sc="Seminovo" aria-pressed="false">Seminovos</button>'));
+  assert.ok(vit.includes("if(a)a.hidden=so;if(c)c.hidden=!so"));            /* sob: mostra Novos/Seminovos e esconde Só disponíveis; outras abas: o contrário */
+  assert.ok(vit.includes("fl.cond=fl.cond===c?'':c"));                         /* tocar de novo no botão ativo volta a mostrar tudo */
+  assert.ok(vit.includes("(!fl.av||fl.cat==='sob'||gdisp(m)!='esgotado')"));   /* Só disponíveis de outra aba não esconde nada na sob encomenda */
 });
 console.log(`\n${ok} testes ok${process.exitCode ? ', com falhas' : ''}.`);
