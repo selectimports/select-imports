@@ -59,3 +59,4 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - **Aba Sob encomenda:** um só aviso de entrega, sem repetir "Sob encomenda" em cada card.
 - **WhatsApp:** botão menor, esconde ao rolar para baixo e depois de 2 segundos parado; a página ganhou espaço no fim.
 - **App:** valores em dólar no padrão brasileiro (US$ 1.275,00) e "Criar encomenda" como botão principal.
+- Os cards não escrevem mais "4 cores", "2 cores"; as bolinhas de cor já mostram as cores disponíveis.
