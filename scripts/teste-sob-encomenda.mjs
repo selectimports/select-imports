@@ -24,7 +24,7 @@ ${iph}
 const fbk=(m,c)=>String(m).toLowerCase()+'|'+String(c).toLowerCase().trim();
 const pCor=p=>String(p.d||'').replace(/\\b\\d+\\s?(?:gb|tb)\\b/ig,' ').replace(/\\s+/g,' ').trim();
 const phOf=p=>(S.cfg.fbank[fbk(p.n,pCor(p))]||[]);
-const save=()=>{},go=()=>{},toast=()=>{},$=()=>null,window={},V=()=>'',msg=()=>{},ask=()=>{};
+let save=()=>{},go=()=>{},toast=()=>{},$=()=>null,window={},V=()=>"",msg=()=>{},ask=()=>{};
 ${app.slice(a0, a1)}
 `, ctx);
 const run = (c) => vm.runInContext(c, ctx);
@@ -203,6 +203,31 @@ t('vitrine refinada: Filtrar ao lado da busca, selo na foto, sem rótulo repetid
 });
 t('app: dólar com padrão brasileiro e Criar encomenda como botão principal', () => {
   assert.equal(run(`seUS(1275)`), '1.275,00'); assert.equal(run(`seUS(1275.5)`), '1.275,50');
-  assert.ok(app.includes('onclick=\"seEnc(${i})\">Criar encomenda</button><button class=g2 onclick=\"seCo(${i})\"'));
+  assert.ok(app.includes('class=sob-go onclick="seEnc(${i})">Criar encomenda</button>'));
+});
+t('tela nova (v90): renderiza, margem dentro do modelo, abas Novos/Seminovos', () => {
+  const a2 = app.indexOf('function seTela(){'), a3 = app.indexOf('function addE(){');
+  vm.runInContext(`const E=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'),R=n=>'R$ '+n.toFixed(2);` + app.slice(a2, a3), ctx);
+  run(`S.cfg.fbank={'iphone 18 pro|bordô':['f']};se().usd=5;se().usdAt=Date.now();se().frete=0;se().marg={'iPhone 18 Pro':500,'iPhone 12':300};se().it=seParse('iPhone 18 Pro 256GB BURGUNDY 1000').rows;se().sn=[]`);
+  const h = run('seTela()');
+  assert.ok(h.includes('class=sob') && h.includes('data-m="iPhone 18 Pro"'));
+  assert.ok(h.includes('Criar encomenda') && h.includes('Margens salvas fora da lista'));
+  assert.ok(!/undefined|NaN/.test(h));
+});
+t('reajuste do dia: só mexer no preço de um aparelho e o preço em reais acompanha', () => {
+  run(`S.cfg.fbank={'iphone 18 pro max|preto':['f']};se().usd=5;se().frete=0;se().nota=1;se().arred='none';se().marg={'iPhone 18 Pro Max':500};se().it=seParse('iPhone 18 Pro Max 256GB BLACK 1000\\niPhone 18 Pro Max 512GB BLACK 1100').rows;se().sn=[]`);
+  const antes = run(`sePr(se().it[0])`);
+  run(`seUsdSet(0,0,'1100')`);
+  assert.ok(run(`sePr(se().it[0])`) > antes);
+  assert.equal(run(`se().it[1].usd`), 1100);
+  run(`se().usd=5.5`);
+  assert.ok(run(`sePr(se().it[0])`) > antes + 500);
+});
+t('só atualizar preços: muda os que vieram e não apaga o resto da lista', () => {
+  run(`se().usd=5;window.__q='';V=()=>'iPhone 18 Pro Max 512GB BLACK 1200';ask=(m,f)=>f();toast=()=>{}`);
+  run(`seUpd(0)`);
+  assert.equal(run(`se().it.length`), 2);
+  assert.equal(run(`se().it.find(x=>x.cap=='512GB').usd`), 1200);
+  assert.equal(run(`se().it.find(x=>x.cap=='256GB').usd`), 1100);
 });
 console.log(`\n${ok} testes ok${process.exitCode ? ', com falhas' : ''}.`);

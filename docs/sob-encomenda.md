@@ -60,3 +60,16 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - **WhatsApp:** botão menor, esconde ao rolar para baixo e depois de 2 segundos parado; a página ganhou espaço no fim.
 - **App:** valores em dólar no padrão brasileiro (US$ 1.275,00) e "Criar encomenda" como botão principal.
 - Os cards não escrevem mais "4 cores", "2 cores"; as bolinhas de cor já mostram as cores disponíveis.
+
+## Visual da aba (v90)
+
+- Duas abas, **Novos** e **Seminovos**, cada uma com seu dólar, sua lista e suas margens.
+- A **margem fica dentro do card de cada modelo**; campo em destaque quando falta.
+- Cada aparelho mostra preço, US$, custo e lucro. "Criar encomenda" e Novo/Seminovo só aparecem quando já há preço.
+- Pendências ficam juntas em um aviso recolhido. Frete, nota, arredondamento, prazo e nomes das cores ficam em "Ajustes".
+
+## Reajuste durante o dia (v91)
+
+- **Dólar mudou:** altere o campo "Dólar dos novos" (ou dos seminovos). Todos os preços em reais são recalculados na hora, e a vitrine atualiza sozinha.
+- **Um aparelho reajustou:** toque no valor em US$ da linha e digite o novo preço. Só aquele aparelho muda.
+- **Vários reajustes:** em "Nova lista", cole só as linhas que mudaram e use **Só atualizar preços**. O app mostra quantos preços mudam e não apaga o resto da lista.
