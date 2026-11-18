@@ -60,7 +60,7 @@ select{-webkit-appearance:none;appearance:none;padding-right:34px;text-overflow:
 .ct:hover .cc{border-color:var(--bds);color:var(--brand)}
 .ct.on{color:var(--ink);font-weight:600}.ct.on .cc{background:var(--btn);border-color:var(--btn);color:#fff}
 .fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;margin-bottom:6px}.fr select{margin:0;padding:10px 28px 10px 10px;font-size:13px;background-position:right 8px center}
-.cr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 12px;font-size:13px;color:var(--mute)}
+.cr{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 12px;font-size:13px;color:var(--mute)}
 .sg{flex:none;display:flex;background:var(--sfc);border-radius:var(--r-m);padding:3px}.sg button{padding:7px 13px;border-radius:var(--r-s);color:var(--mute)}.sg .on{background:var(--btn);color:#fff}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:8px;cursor:pointer;display:flex;flex-direction:column;transition:border-color .14s,transform .14s}
@@ -194,7 +194,7 @@ body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card)
 .fr{grid-template-columns:1fr;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
 .fr::before{content:"Filtros";font-weight:600;font-size:15px}
 .fr select{padding:11px 30px 11px 12px;font-size:14px;min-height:44px}
-.cr{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.cr{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}#cn{white-space:nowrap;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}.cr .chip,.cr .sg{flex:none}
 /* grade de produtos */
 .grid{grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:16px}
 .card{padding:10px;transition:box-shadow .18s ease,border-color .18s ease,transform .14s ease}
@@ -333,7 +333,7 @@ body.np .gh{display:block;position:sticky;top:0;z-index:4;background:var(--card)
 .ic{width:44px;height:44px}
 #ga:has(.phd){background:linear-gradient(160deg,var(--soft),var(--card))}
 .fr select:nth-child(odd):last-child{grid-column:1/-1}
-@media (max-width:639px){.fr{grid-template-columns:1fr 1fr}.tban{padding:12px 14px;gap:10px;margin:8px 0}.tban small{display:none}.tban i{font-size:13px}#cn{white-space:nowrap}.cr .chip{padding:8px 10px;font-size:13px}}
+@media (max-width:639px){.fr{grid-template-columns:1fr 1fr}.tban{padding:12px 14px;gap:10px;margin:8px 0}.tban small{display:none}.tban i{font-size:13px}#cn{white-space:nowrap;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}.cr{flex-wrap:nowrap;gap:6px}.exb{display:none}.cr .chip,.cr .sg{flex:none}.cr .chip{padding:8px 10px;font-size:13px}}
 /* ===== ajustes: foto do card toda branca, nome do aparelho maior ===== */
 .art:has(img),.art:has(.trk),.art.ld{background:#fff;animation:none}
 .card .art,.card .art img{border:0}
@@ -675,7 +675,7 @@ function list(){const ls=$('#ls');if(!ls)return;{const h=$('#sobh');if(h)h.hidde
 const z=+cfg.pags||12,pgd=on.pag&&r.length>z,pages=Math.ceil(r.length/z);if(pg.p>pages)pg.p=pages||1;const vis=!pgd?r:cfg.pagm==='pages'?r.slice((pg.p-1)*z,pg.p*z):r.slice(0,pg.n*z);
 const act=q.trim()||fl.cat||fl.cond||fl.kind||fl.price||fl.av;
 ls.className=l?'':'grid';recon(ls,vis.length?vis.map(m=>({k:(l?'l':'g')+m.id,h:(l?lrow:card)(m)})):[{k:'empty',h:`<div class="empty">Nenhum produto encontrado.<br>Tente limpar os filtros ou fale com a gente no WhatsApp.${act?'<br><button class="chip" data-clr style="margin-top:12px">Limpar filtros</button>':''}</div>`}]);
-setT($('#cn'),'Exibindo '+vis.length+(vis.length<r.length?' de '+r.length:'')+' produto'+(r.length===1?'':'s'));
+setR($('#cn'),''+vis.length+(vis.length<r.length?' de '+r.length:'')+' produto'+(r.length===1?'':'s'));
 setR($('#pg'),!pgd?'':cfg.pagm==='pages'?`<div class="pgr"><button class="chip" data-pgn="${pg.p-1}" aria-label="Página anterior" ${pg.p<2?'disabled':''}>${si('chl',16)}</button>${Array.from({length:pages},(_,i)=>`<button class="chip ${i+1===pg.p?'on':''}" data-pgn="${i+1}" aria-label="Página ${i+1}" ${i+1===pg.p?'aria-current="page"':''}>${i+1}</button>`).join('')}<button class="chip" data-pgn="${pg.p+1}" aria-label="Próxima página" ${pg.p>=pages?'disabled':''}>${si('chr',16)}</button></div>`:(vis.length<r.length?`<button class="btn sf" data-more style="width:100%;margin:14px 0">Ver mais (${r.length-vis.length} restantes)</button>`:''));
 const g=$('#sg');if(g)setR(g,s?P.filter(m=>norm(m.n).includes(s)).slice(0,3).map(m=>`<button class="chip" data-sg="${X(m.n)}">${X(m.n)}</button>`).join(''):'')}
 const CX=()=>view.n==='prod'?((P.find(g=>g.id===view.id)||{}).c||''):fl.cat,iph=()=>{const c=CX();return !c||c==='apple'||c==='sob'},faqL=()=>(cfg.faq||[]).filter(f=>!f[2]||!CX()||String(f[2]).toLowerCase()===CX());

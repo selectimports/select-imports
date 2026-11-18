@@ -186,4 +186,9 @@ t('botão de encomendar não leva valor nem Pix', () => {
   assert.ok(vit.includes("x.disp!='esgotado'&&x.disp!='enc'?"));
   assert.ok(!/Quero encomendar.{0,80}no Pix/.test(vit));
 });
+t('vitrine: contagem, "Só disponíveis" e botões de grade/lista ficam numa linha só, em qualquer aba e largura', () => {
+  assert.ok(vit.includes(".cr{display:flex;flex-wrap:nowrap;"));                 /* a linha nunca quebra */
+  assert.ok(vit.includes("#cn{white-space:nowrap;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}.cr .chip,.cr .sg{flex:none}"));
+  assert.ok(!vit.includes('class="exb"'));                                         /* contagem curta: "12 de 26 produtos" */
+});
 console.log(`\n${ok} testes ok${process.exitCode ? ', com falhas' : ''}.`);

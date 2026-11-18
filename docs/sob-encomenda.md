@@ -47,3 +47,7 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - Os lacrados/novos usam a cotação do dólar do fornecedor deles, e os seminovos usam a cotação do fornecedor de seminovos. São dois campos em "Valores do dia".
 - Frete e custos, nota e arredondamento continuam sendo um só valor para as duas listas.
 - Seminovo sem a sua cotação não recebe preço e não vai para a vitrine; o app avisa. O mesmo vale para os novos.
+
+## Vitrine: linha de filtros
+
+- A contagem ("12 de 26 produtos"), o botão "Só disponíveis" e os botões de grade/lista ficam sempre na mesma linha, em todas as abas (Todos, iPhones, Cosméticos, Acessórios e Sob encomenda). A palavra "Exibindo" saiu para a contagem caber.
