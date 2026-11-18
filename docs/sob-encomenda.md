@@ -42,3 +42,9 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - Ao colar uma lista nova (novos ou seminovos), o app compara com a anterior por modelo, capacidade e cor e guarda: o que entrou, o que saiu, o que subiu e o que desceu de preço em dólar.
 - O resultado aparece em um quadro logo abaixo do quadro de colar, com a data da lista anterior, e fica até a próxima colagem. A primeira lista não tem comparação.
 - Os seminovos mantêm a mesma garantia dos demais, usam as fotos do Banco de fotos e aparecem na vitrine só como "Seminovo", sem a grade.
+
+## Cotação separada
+
+- Os lacrados/novos usam a cotação do dólar do fornecedor deles, e os seminovos usam a cotação do fornecedor de seminovos. São dois campos em "Valores do dia".
+- Frete e custos, nota e arredondamento continuam sendo um só valor para as duas listas.
+- Seminovo sem a sua cotação não recebe preço e não vai para a vitrine; o app avisa. O mesmo vale para os novos.

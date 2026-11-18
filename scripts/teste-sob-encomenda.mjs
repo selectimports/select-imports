@@ -78,7 +78,7 @@ t('seminovos: aceita linha sem código nem tabulação e ignora chip e região',
 });
 t('seminovos vão para a vitrine como Seminovo, com margem e preço próprios', () => {
   const sv = run(`JSON.stringify([S.se,S.cfg.fbank])`);
-  const out = JSON.parse(run(`S.se=undefined;const s=se();s.usd=5;s.marg={'iPhone 14':999};s.msn={'iPhone 14':200};s.it=[];s.sn=seParseSn(${JSON.stringify(listaSn)}).rows;S.cfg.fbank={'iphone 14|amarelo':['f'],'iphone 14|vermelho':['f']};JSON.stringify(seRows({pixb:true}).map(r=>[r.n,r.d,r.co,r.pr]))`));
+  const out = JSON.parse(run(`S.se=undefined;const s=se();s.usd=9;s.usdSn=5;s.marg={'iPhone 14':999};s.msn={'iPhone 14':200};s.it=[];s.sn=seParseSn(${JSON.stringify(listaSn)}).rows;S.cfg.fbank={'iphone 14|amarelo':['f'],'iphone 14|vermelho':['f']};JSON.stringify(seRows({pixb:true}).map(r=>[r.n,r.d,r.co,r.pr]))`));
   run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
   assert.deepEqual(out, [['iPhone 14','128GB Amarelo','Seminovo',1790],['iPhone 14','256GB Vermelho','Seminovo',1890]]);
 });
@@ -101,6 +101,15 @@ t('o que mudou: seApply e seApplySn guardam a comparação; primeira lista não 
   const r = JSON.parse(run(`S.se=undefined;seApply({rows:seParse('IPHONE 16 128GB BLACK 700').rows,bad:[]});const a=se().dif;seApply({rows:seParse('IPHONE 16 128GB BLACK 710\\nIPHONE 17 256GB BLACK 800').rows,bad:[]});const b=se().dif;seApplySn({rows:seParseSn('IPHONE 14 128GB YELLOW (SWAP GRADO A) 298').rows,ig:{},bad:[]});const c=se().difSn;seApplySn({rows:seParseSn('IPHONE 14 128GB YELLOW (SWAP GRADO A) 290').rows,ig:{},bad:[]});JSON.stringify([a,b&&[b.add.length,b.up.length],c,se().difSn.dn.length])`));
   run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
   assert.deepEqual(r, [null, [1, 1], null, 1]);
+});
+t('cotação separada: seminovos usam a cotação dos seminovos, novos usam a dos novos', () => {
+  const sv = run(`JSON.stringify([S.se,S.cfg.fbank])`);
+  const r = JSON.parse(run(`(()=>{S.se=undefined;const s=se();s.usd=6;s.usdSn=5;s.marg={'iPhone 16':100};s.msn={'iPhone 16':100};s.it=seParse('IPHONE 16 128GB\\nBlack | HN/A | $700').rows;s.sn=seParseSn('IPHONE 16 128GB LL BLACK (SWAP GRADO A) 700').rows;const a=[sePr(s.it[0]),sePr(s.sn[0]),seCost(s.it[0]),seCost(s.sn[0])];se().usdSn=0;const b=sePr(se().sn[0]);se().usdSn=5;se().usd=0;const c=[sePr(se().it[0]),sePr(se().sn[0])];return JSON.stringify([a,b,c])})()`));
+  run(`[S.se,S.cfg.fbank]=JSON.parse(${JSON.stringify(sv)})`);
+  assert.equal(r[0][2], 4200); assert.equal(r[0][3], 3500);           /* custo = dólar × cotação de cada lista */
+  assert.ok(r[0][0] > r[0][1]);                                         /* cotação maior, preço maior */
+  assert.equal(r[1], 0);                                                /* seminovo sem a sua cotação não recebe preço */
+  assert.equal(r[2][0], 0); assert.ok(r[2][1] > 0);                     /* novo sem a sua cotação não recebe preço, mas o seminovo continua */
 });
 t('Duo: cores traduzidas para Branco Estelar e Céu Noturno', () => {
   const c = run(`seParse(${JSON.stringify(lista)}).rows.filter(r=>r.m=='iPhone Duo').map(r=>seCor(r.m,r.en)).sort().join('|')`);
