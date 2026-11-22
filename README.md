@@ -59,7 +59,7 @@ Importante:
 
 ## Dar baixa no estoque (avaria, uso próprio, perda)
 
-- **Onde:** botão **Dar baixa** dentro de cada produto do Estoque (Estoque › produto › Dar baixa). O histórico fica em **Mais › Baixas de estoque** (e no atalho do Estoque).
+- **Onde:** botão **Dar baixa** dentro de cada produto do Estoque (Estoque › produto › Dar baixa). O histórico fica em **Mais › Baixas de estoque** (fora da tela do Estoque, para ela não ficar carregada).
 - **O que faz:** tira a quantidade do estoque e lança a despesa **Perda / uso próprio** (custo unitário já com frete e taxas rateados × quantidade). A despesa entra no lucro líquido e aparece em Despesas, mas **não altera o saldo da loja** (o dinheiro saiu na compra); no extrato aparece só como *Informativo*. Não mexe em vendas, aportes nem na vitrine além da disponibilidade do item.
 - **iPhone:** escolha o IMEI que está saindo na própria tela.
 - **Desfazer:** devolve ao estoque e estorna a despesa com um lançamento negativo (nada é apagado). A despesa de baixa só pode ser cancelada por *Desfazer baixa*.
