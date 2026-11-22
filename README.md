@@ -57,6 +57,14 @@ Importante:
 - **Estoque › Cadastrar novos produtos** é um cartão único: um formulário por produto (iPhone, Cosmético, Acessório; Eletrônico quando ativado em **Configurações › Estoque › Vender Eletrônicos**), com **lote opcional** (fornecedor, taxa e frete rateado em *Fretes e custos*; cada lote aparece recolhido e abre pela seta), pagamento pelo saldo ou já pago, situação (a caminho/chegou) e **nota fiscal** por unidade ou do pedido inteiro (dividida entre as unidades).
 - **Venda a prazo:** na venda, a forma de pagamento **A prazo** (com prazo em dias) lança o valor em *Contas › A receber* ligado à venda e ao cliente. O valor só entra no saldo quando é marcado como recebido. Editar ou cancelar a venda mantém tudo coerente (a lixeira restaura o valor a receber).
 
+## Dar baixa no estoque (avaria, uso próprio, perda)
+
+- **Onde:** botão **Dar baixa** dentro de cada produto do Estoque (Estoque › produto › Dar baixa). O histórico fica em **Mais › Baixas de estoque** (e no atalho do Estoque).
+- **O que faz:** tira a quantidade do estoque e lança a despesa **Perda / uso próprio** (custo unitário já com frete e taxas rateados × quantidade). A despesa entra no lucro líquido e aparece em Despesas, mas **não altera o saldo da loja** (o dinheiro saiu na compra); no extrato aparece só como *Informativo*. Não mexe em vendas, aportes nem na vitrine além da disponibilidade do item.
+- **iPhone:** escolha o IMEI que está saindo na própria tela.
+- **Desfazer:** devolve ao estoque e estorna a despesa com um lançamento negativo (nada é apagado). A despesa de baixa só pode ser cancelada por *Desfazer baixa*.
+- **Dados:** `S.bx` (histórico) e despesas com `bx` (id da baixa); `es` marca o estorno.
+
 ## Fornecedores e frete por cidade
 
 Cada fornecedor do lote tem uma cidade, e ela define o frete:
