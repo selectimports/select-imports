@@ -36,10 +36,13 @@ Preço na vitrine = (US$ × cotação + frete e custos + margem) ÷ (1 − nota%
 - No app, cada modelo mostra só a primeira opção e tem o botão "Ver mais N opções" / "Minimizar".
 - O quadro de colar a lista de seminovos fica logo abaixo do quadro dos lacrados, e a margem dos seminovos aparece logo abaixo dele depois que a lista é lida.
 
-## O que mudou desde a última lista
+## Alterações da lista
 
 - Ao colar uma lista nova (novos ou seminovos), o app compara com a anterior por modelo, capacidade e cor e guarda: o que entrou, o que saiu, o que subiu e o que desceu de preço em dólar.
-- O resultado aparece em um quadro logo abaixo do quadro de colar, com a data da lista anterior, e fica até a próxima colagem. A primeira lista não tem comparação.
+- O resultado aparece em um quadro "Alterações da lista" logo abaixo do quadro de colar, com a data da lista anterior, e fica até a próxima colagem. A primeira lista não tem comparação.
+- O quadro começa fechado e só abre quando você toca nele. Se abrir, continua aberto enquanto você mexe nas margens; ao colar uma lista nova, volta a ficar fechado.
+- Ao mexer em margem, dólar ou cor, só a tela de Sob encomenda é atualizada: a rolagem não pula e o campo que você tocou em seguida continua selecionado.
+- Quando há modelos sem margem, aparece no topo o selo "N modelos sem margem". Ao tocar nele, o app leva ao primeiro campo que falta (e troca para Seminovos, se for lá).
 - Os seminovos mantêm a mesma garantia dos demais, usam as fotos do Banco de fotos e aparecem na vitrine só como "Seminovo", sem a grade.
 
 ## Cotação separada

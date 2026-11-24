@@ -207,7 +207,7 @@ t('app: dólar com padrão brasileiro e Criar encomenda como botão principal', 
 });
 t('tela nova (v90): renderiza, margem dentro do modelo, abas Novos/Seminovos', () => {
   const a2 = app.indexOf('function seTela(){'), a3 = app.indexOf('function addE(){');
-  vm.runInContext(`const E=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'),R=n=>'R$ '+n.toFixed(2);` + app.slice(a2, a3), ctx);
+  vm.runInContext(`const ic=()=>'';const E=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'),R=n=>'R$ '+n.toFixed(2);` + app.slice(a2, a3), ctx);
   run(`S.cfg.fbank={'iphone 18 pro|bordô':['f']};se().usd=5;se().usdAt=Date.now();se().frete=0;se().marg={'iPhone 18 Pro':500,'iPhone 12':300};se().it=seParse('iPhone 18 Pro 256GB BURGUNDY 1000').rows;se().sn=[]`);
   const h = run('seTela()');
   assert.ok(h.includes('class=sob') && h.includes('data-m="iPhone 18 Pro"'));
@@ -229,5 +229,38 @@ t('só atualizar preços: muda os que vieram e não apaga o resto da lista', () 
   assert.equal(run(`se().it.length`), 2);
   assert.equal(run(`se().it.find(x=>x.cap=='512GB').usd`), 1200);
   assert.equal(run(`se().it.find(x=>x.cap=='256GB').usd`), 1100);
+});
+
+t('CPF: máscara enquanto digita, validação dos dígitos e aviso de cadastro repetido', () => {
+  const g = (re) => { const m = app.match(re); assert.ok(m, 'trecho não encontrado: ' + re); return m[0]; };
+  const c = vm.createContext({});
+  vm.runInContext(g(/const cpfMask=.*?;\n/) + g(/const cpfOk=.*?;\n/), c);
+  const r = (x) => vm.runInContext(x, c);
+  assert.equal(r(`cpfMask('31215600070')`), '312.156.000-70');
+  assert.equal(r(`cpfMask('3121')`), '312.1');
+  assert.equal(r(`cpfMask('312.156.000-70999')`), '312.156.000-70');
+  assert.equal(r(`cpfOk('529.982.247-25')`), true);
+  assert.equal(r(`cpfOk('529.982.247-24')`), false);
+  assert.equal(r(`cpfOk('111.111.111-11')`), false);
+  assert.equal(r(`cpfOk('312.156.000')`), false);
+  assert.ok(app.includes('function pePar(k,cp,ph)') && app.includes('Já existe um cadastro com o mesmo'));
+});
+t('quadro Alterações da lista: fechado por padrão e só abre com o toque', () => {
+  assert.ok(!app.includes('O que mudou'));
+  const a = app.indexOf('const seDifH='), b = app.indexOf('function seDfT'), b2 = app.indexOf('\n', b);
+  const c = vm.createContext({ window: {}, Date });
+  vm.runInContext(`const E=s=>String(s),seCor=(m,e)=>e,seUS=n=>n.toFixed(2).replace('.',',');` + app.slice(a, b2), c);
+  const d = `{since:Date.now(),add:[{m:'iPhone 17',cap:'256GB',en:'Prateado',usd:888}],del:[],up:[],dn:[]}`;
+  assert.ok(!vm.runInContext(`seDifH(${d},'n')`, c).includes(' open'));
+  assert.ok(vm.runInContext(`seDifH(${d},'n')`, c).includes('Alterações da lista'));
+  vm.runInContext(`window.__seDf={n:true}`, c);
+  assert.ok(vm.runInContext(`seDifH(${d},'n')`, c).includes(' open'));
+});
+t('Sob encomenda: margem, dólar e cor atualizam só a própria tela (sem refazer o app todo)', () => {
+  for (const f of ['seSet', 'seMgSet', 'seCo', 'seUsdSet', 'seUpd', 'seCorSet']) {
+    const i = app.indexOf('function ' + f + '('), l = app.slice(i, app.indexOf('\n', i));
+    assert.ok(l.includes('seGo()') && !/[^e]go\(\)/.test(l), f);
+  }
+  assert.ok(app.includes('function seNeed()') && app.includes('class=sob-pend'));
 });
 console.log(`\n${ok} testes ok${process.exitCode ? ', com falhas' : ''}.`);
