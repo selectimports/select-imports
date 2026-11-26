@@ -448,7 +448,11 @@
   };
 
   /* ---------- funcoes extras usadas pelo app ---------- */
-  window.sbSair = async function () { await init(); await sb.auth.signOut(); };
+  window.sbSair = async function () {
+    try { await init(); await Promise.race([sb.auth.signOut({ scope: 'local' }), new Promise(function (r) { setTimeout(r, 3000); })]); } catch (e) {}
+    try { [localStorage, sessionStorage].forEach(function (st) { Object.keys(st).filter(function (k) { return /^sb-/.test(k) || k === 'si'; }).forEach(function (k) { st.removeItem(k); }); }); } catch (e) {}
+    location.reload();
+  };
   window.sbTrocarSenha = async function (p) { await init(); var r = await sb.auth.updateUser({ password: p }); return r.error ? r.error.message : null; };
   window.sbPublicar = async function (d) {
     await init();
