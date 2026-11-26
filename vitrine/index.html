@@ -3,7 +3,7 @@
 <meta name="description" content="Apple &amp; Cosméticos">
 <meta property="og:title" content="SELECT IMPORTS | Vitrine"><meta property="og:description" content="Apple &amp; Cosméticos"><meta property="og:type" content="website"><meta property="og:image" content="https://selectimports.vercel.app/icons/icon-512.png">
 <meta name="theme-color" content="#48336C"><link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32.png"><link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <script>try{var t=localStorage.getItem('vt');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../config.js"></script>
 <script>(function(){var U=window.SUPABASE_URL,K=window.SUPABASE_ANON_KEY;if(!U||!K||/COLE-/.test(U+K))return;try{window.__vp=fetch(U+'/rest/v1/vitrine_publica?id=eq.loja&select=dados',{headers:{apikey:K,Authorization:'Bearer '+K},cache:'no-store'}).then(function(r){return r.ok?r.json():Promise.reject(r.status)});window.__vp.catch(function(){})}catch(e){}})()</script>
@@ -573,7 +573,8 @@ section.b.cd .btn:hover,section.b.cd .trbtn:hover{filter:brightness(.97)}
 /* contador de fotos e selo de destaque na paleta da marca */
 .gc{background:rgba(31,22,48,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 /* preço em destaque e "no Pix" na cor de confirmação, igual em todas as telas */
-.pr{font-weight:700;letter-spacing:-.02em}
+.pr{font-weight:700;font-size:22px;letter-spacing:-.02em;line-height:1.15}
+@media(min-width:720px){.pr{font-size:24px}}
 .sm .pxk{color:var(--ok);font-weight:600}
 /* setas do carrossel mais discretas e iguais no computador e no celular */
 .gn,.gn.l,.gn.r{width:36px;height:36px;margin-top:-18px;font-size:22px;box-shadow:0 2px 8px rgba(0,0,0,.16);background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
@@ -684,7 +685,7 @@ $('#fab').href=wa('Olá! Vim pela vitrine da '+cfg.nome+'.');$('#fab').innerHTML
 const id=new URLSearchParams(location.search).get('p');if(id){const m=P.find(g=>g.v.some(x=>String(x.id)==id));if(m){const x=m.v.find(y=>String(y.id)==id);view={n:'prod',id:m.id,k:x.k,col:x.col,vid:x.id}}}
 rr();try{if(!sessionStorage.getItem('v')){sessionStorage.setItem('v','1');track('visita')}}catch(e){}}
 /* ---------- peças de tela ---------- */
-const badges=(m,np)=>{let b='';if(m.dest)b+='<span class="bd d">Destaque</span>';if(on.news!==false&&!np&&gdisp(m)!='esgotado'){const cr=Math.max(0,...m.v.map(y=>y.cr||0)),dd=cr?(Date.now()-cr)/864e5:99;if(dd<1)b+='<span class="bd n">Chegou hoje</span>';else if(dd<(+cfg.novoDias||7))b+='<span class="bd n">Novidade</span>'}const o=m.v.find(y=>y.old&&y.old>y.pr);if(!np&&o&&o.pr>0)b+='<span class="bd p">-'+Math.round((1-o.pr/o.old)*100)+'%</span>';const g=gdisp(m);if(g=='enc'){if(fl.cat!=='sob')b+='<span class="bd">Sob encomenda</span>'}else if(g=='esgotado')b+='<span class="bd e">Esgotado</span>';else if(g=='ultimas')b+='<span class="bd u">Últimas unidades</span>';return b};
+const badges=(m,np)=>{let b='';if(m.dest&&np)b+='<span class="bd d">Destaque</span>';if(on.news!==false&&!np&&gdisp(m)!='esgotado'){const cr=Math.max(0,...m.v.map(y=>y.cr||0)),dd=cr?(Date.now()-cr)/864e5:99;if(dd<1)b+='<span class="bd n">Chegou hoje</span>';else if(dd<(+cfg.novoDias||7))b+='<span class="bd n">Novidade</span>'}const o=m.v.find(y=>y.old&&y.old>y.pr);if(!np&&o&&o.pr>0)b+='<span class="bd p">-'+Math.round((1-o.pr/o.old)*100)+'%</span>';const g=gdisp(m);if(g=='enc'){if(fl.cat!=='sob')b+='<span class="bd">Sob encomenda</span>'}else if(g=='esgotado')b+='<span class="bd e">Esgotado</span>';else if(g=='ultimas')b+='<span class="bd u">Últimas unidades</span>';return b};
 const cname=m=>(cfg.cats.find(c=>c.id==m.c)||{}).nome||'';
 const phd=m=>`<div class="phd">${ic(m.c,48)}<small>Foto em breve</small></div>`;
 function pb(x,big){if(!cfg.preco||!(pv(x)>0))return `<div class="pr" style="font-size:${big?24:16}px">Consulte o preço</div>`;return (x.old&&x.old>x.pr?`<div class="old">${R(x.old)}</div>`:'')+`<div class="pr" ${big?'style="font-size:36px;margin:2px 0"':''}>${Rs(pv(x))}</div><div class="sm" ${big?'style="margin:0"':''}>${x.pix||cfg.pixb!==false?'<b class="pxk">no Pix</b>':''}${x.par?`${x.pix||cfg.pixb!==false?' · ':''}ou ${x.par.n}x de ${R(x.par.v)} no cartão`:''}</div>`}
