@@ -170,6 +170,20 @@
   #sb-login .sbl-card{width:100%;max-width:440px;margin:0;padding:36px 34px 24px;border-radius:32px}
   #sb-login h1{font-size:29px}
 }
+
+/* entrada do app: o cartao do login sai, a marca fica e o app aparece por baixo */
+#sb-login.sai{pointer-events:none}
+#sb-login.sai .sbl-lado{opacity:0;transform:translateY(18px);transition:opacity .32s ease,transform .45s var(--ease),flex-basis .55s var(--ease),padding .55s var(--ease)}
+#sb-login.sai .sbl-lema{opacity:0;transition:opacity .25s}
+#sb-login.sai .sbl-mono .b{display:none}
+#sb-login.sai .sbl-mono .l{animation:none;opacity:.75}
+#sb-login.out{opacity:0;transition:opacity .5s ease}
+@media(min-width:880px){#sb-login.sai .sbl-lado{flex-basis:0;padding-left:0;padding-right:0;overflow:hidden}}
+#sb-login.cl{color:#48336C;background:radial-gradient(80% 42% at 50% 0%,rgba(129,86,161,.14),transparent 72%),linear-gradient(180deg,#F8F3F9,#EEE2F0)}
+#sb-login.cl::after,#sb-login.cl .sbl-halo{display:none}
+#sb-login.cl .sbl-mono .b{display:none}
+#sb-login.cl .sbl-mono .l{animation:none;background:linear-gradient(120deg,rgba(72,51,108,.10),rgba(129,86,161,.18))}
+#sb-login.cl .sbl-sim,#sb-login.cl .sbl-logo{filter:none}
 /* aparelhos mais fracos ou sem suporte: sem desfoque pesado */
 #sb-login.leve .sbl-card{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(30,21,48,.94)}
 #sb-login.leve .sbl-mono .b,#sb-login.leve::after{display:none}
@@ -217,7 +231,7 @@
           if (vv) { vv.removeEventListener('resize', fit); vv.removeEventListener('scroll', fit); }
           d.removeEventListener('focusin', tec); d.removeEventListener('focusout', onOut);
           d.removeEventListener('pointerdown', onDown); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onUp);
-          d.remove(); resolve();
+          resolve(); entrada(d, 800);
         }
         function card(body) {
           var c = d.querySelector('.sbl-card');
@@ -268,11 +282,11 @@
         }
         if (mode === 'config') { card('<h1>Falta configurar</h1><p class="sbl-aviso">Falta configurar o arquivo config.js com a URL e a chave pública do Supabase.</p>'); return; }
         if (mode === 'mfa') { mfaStep(); return; }
-        card('<h1>Bem-vindo de volta</h1><p class="sbl-sub">Entre com seu e-mail e senha</p>' +
-          '<div class="sbl-cp">' + IC_MAIL + '<input id="sb-e" type="email" inputmode="email" autocapitalize="none" spellcheck="false" autocomplete="username" placeholder=" "><label for="sb-e">E-mail</label></div>' +
-          '<div class="sbl-cp sn">' + IC_LOCK + '<input id="sb-p" type="password" autocomplete="current-password" placeholder=" "><label for="sb-p">Senha</label><button id="sb-eye" type="button" class="sbl-ver">Mostrar</button></div>' +
+        card('<h1>Bem-vindo de volta</h1><p class="sbl-sub">Entre com seu e-mail e senha</p><form id="sb-f" method="post" action="#" autocomplete="on" novalidate>' +
+          '<div class="sbl-cp">' + IC_MAIL + '<input id="sb-e" name="username" type="email" inputmode="email" autocapitalize="none" spellcheck="false" autocomplete="username" placeholder=" "><label for="sb-e">E-mail</label></div>' +
+          '<div class="sbl-cp sn">' + IC_LOCK + '<input id="sb-p" name="password" type="password" autocomplete="current-password" placeholder=" "><label for="sb-p">Senha</label><button id="sb-eye" type="button" class="sbl-ver">Mostrar</button></div>' +
           '<label class="sbl-opc"><input id="sb-rm" type="checkbox" checked><span class="sw"></span>Manter conectado</label>' +
-          '<button id="sb-go" class="sbl-go"><span>Entrar</span></button><p id="sb-er" class="sbl-erro" role="alert"></p>' +
+          '<button id="sb-go" type="submit" class="sbl-go"><span>Entrar</span></button><p id="sb-er" class="sbl-erro" role="alert"></p></form>' +
           '<p class="sbl-seg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Acesso restrito à equipe</p>');
         el('sb-eye').addEventListener('click', function () {
           var p = el('sb-p'), s = p.type === 'password'; p.type = s ? 'text' : 'password'; this.textContent = s ? 'Ocultar' : 'Mostrar';
@@ -285,15 +299,43 @@
           el('sb-go').disabled = true; el('sb-go').classList.add('carr'); el('sb-go').textContent = 'Entrando...';
           var r = await sb.auth.signInWithPassword({ email: e, password: p });
           if (r.error) { el('sb-go').disabled = false; el('sb-go').classList.remove('carr'); el('sb-go').textContent = 'Entrar'; er('E-mail ou senha incorretos.', ['sb-e', 'sb-p']); return; }
+          try { if (window.PasswordCredential && navigator.credentials && navigator.credentials.store) navigator.credentials.store(new window.PasswordCredential({ id: e, password: p, name: e })); } catch (x) {}
           if (await needMfa()) { mfaStep(); return; }
           done();
         }
-        el('sb-go').addEventListener('click', go);
+        el('sb-f').addEventListener('submit', function (ev) { ev.preventDefault(); go(); });
         el('sb-e').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); el('sb-p').focus(); } });
-        el('sb-p').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') go(); });
+        
       }
       if (document.body) build(); else document.addEventListener('DOMContentLoaded', build);
     });
+  }
+
+  /* entrada do app: mantem a marca na tela enquanto os dados chegam e some com suavidade */
+  function entrada(d, min) {
+    var t0 = Date.now();
+    d.classList.add('sai');
+    (function esp() {
+      var t = Date.now() - t0;
+      if ((window.__loaded === true && t >= min) || t > 4500) {
+        d.classList.add('out');
+        setTimeout(function () { if (d.parentNode) d.remove(); }, 540);
+      } else setTimeout(esp, 80);
+    })();
+  }
+  /* quem ja estava logado ve a mesma abertura (no tema do app) em vez do "Carregando" */
+  function abertura(pronto) {
+    if (!document.body) { document.addEventListener('DOMContentLoaded', function () { abertura(pronto); }); return; }
+    sbStyle();
+    var luz = true; try { luz = localStorage.getItem('sith') !== '0'; } catch (e) {}
+    var k = luz ? 'escuro' : 'claro';
+    var d = document.createElement('div'); d.id = 'sb-login'; d.className = 'solo' + (luz ? ' cl' : '');
+    if (lowEnd()) d.classList.add('leve');
+    d.innerHTML = '<div class="sbl-marca"><div class="sbl-mono" aria-hidden="true"><i class="b"></i><i class="l"></i></div><div class="sbl-halo" aria-hidden="true"></div>' +
+      '<img class="sbl-sim" src="icons/simbolo-' + k + '.png" alt=""><img class="sbl-logo" src="icons/logotipo-' + k + '.png" alt="select imports"></div>';
+    document.body.appendChild(d);
+    entrada(d, 700);
+    if (pronto) pronto();
   }
 
   function init() {
@@ -304,6 +346,7 @@
       var r = await sb.auth.getSession();
       if (!r.data.session) await ui('login');
       else if (await needMfa()) await ui('mfa');
+      else await new Promise(function (r) { abertura(r); });
       var h = document.getElementById('sb-hide'); if (h) h.remove();
       sb.auth.onAuthStateChange(function (ev) {
         if (ev === 'SIGNED_OUT') { try { localStorage.removeItem('si'); } catch (e) {} location.reload(); }
