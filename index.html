@@ -1014,6 +1014,39 @@ label.swr,label.lsc{justify-content:space-between}label.acchk{justify-content:sp
 body::before{content:"";position:fixed;z-index:-1;right:-12vw;top:-9vh;width:min(70vw,820px);aspect-ratio:1200/739;pointer-events:none;background:#E3D0E5;opacity:.05;-webkit-mask:url(icons/monograma-claro.png) center/contain no-repeat;mask:url(icons/monograma-claro.png) center/contain no-repeat}
 body.lt::before{background:#48336C;opacity:.055}
 @media print{body::before{display:none}}
+/* celular: monograma de fundo mais para baixo, na altura do botão Nova venda */
+@media(max-width:719px){body::before{top:15vh}}
+/* todos os botões roxos com o mesmo degradê do Nova venda */
+.sob-go,.vb .vrec,#rec .rc-act .pri{background:linear-gradient(180deg,#9266B2 0%,#7B4F9B 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.sob-go:hover,.vb .vrec:hover,#rec .rc-act .pri:hover{background:linear-gradient(180deg,#8559A6,#6E4890);filter:none}
+body.lt .sob-go,body.lt .vb .vrec{background:linear-gradient(180deg,#59417F,#48336C);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+body.lt .sob-go:hover,body.lt .vb .vrec:hover{background:linear-gradient(180deg,#4A3570,#3A2958)}
+/* ===== Padrão de botões (hierarquia por função) =====
+   Primário  = degradê lilás (.b, .sob-go, .vrec, recibo .pri): ação principal da tela
+   Secundário= fundo neutro com borda (.g2, .sob-btn, .sob-pill): ações de apoio
+   Perigo    = vermelho (.b.dg, .x): excluir/remover
+   Ícone     = sem fundo (.g): ações discretas
+   Todos com a mesma altura de toque, raio e peso de fonte por nível */
+.b,.g2,.sob-go,.sob-btn,.sob-pill{min-height:44px;border-radius:var(--r-m);letter-spacing:0}
+.sob-go,.sob-btn,.sob-pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;line-height:1.2}
+.sob-go,.b{font-weight:600}
+.g2,.sob-btn,.sob-pill{font-weight:500;background:var(--surf);border:1px solid var(--bd-s);color:var(--tx)}
+.g2:hover,.sob-btn:hover,.sob-pill:hover{background:var(--surf2);border-color:var(--tx3)}
+.g,.x{width:40px;height:40px}
+/* chips de período/abas: texto sempre centralizado no chip */
+.tabs button{display:flex;align-items:center;justify-content:center;text-align:center;text-indent:0;padding-left:12px;padding-right:12px;line-height:1.2}
+.tabs .on{padding-left:12px;padding-right:12px}
+@media(max-width:600px){.tabs button,.tabs .on{padding-left:6px;padding-right:6px}}
+@media(min-width:1360px){main[data-t=r]>.tabs button,main[data-t=r]>.tabs .on{padding-left:8px;padding-right:8px}}
+/* cards de números: títulos com a mesma altura, valores na mesma linha e rodapés colados embaixo */
+.kg .k{display:flex;flex-direction:column;align-items:flex-start}
+.kg .k>br{display:none}
+.kg .k>b{margin:4px 0 2px}
+.kg .k>small:first-child{line-height:1.3}
+.kg .k>b~small{margin-top:auto;padding-top:8px;line-height:1.3}
+.kg .k>.row{align-self:stretch}
+@media(max-width:600px){.kg .k:not(.hero)>small:first-child{min-height:2.6em}}
+@media(min-width:601px) and (max-width:1100px){.kg:not(.c2) .k:not(.hero)>small:first-child{min-height:1.3em}}
 /* botão principal: degradê lilás discreto (o de perigo continua vermelho) */
 .b:not(.dg){background:linear-gradient(180deg,#9266B2 0%,#7B4F9B 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
 .b:not(.dg):hover{background:linear-gradient(180deg,#8559A6,#6E4890)}
@@ -2351,8 +2384,8 @@ const RCSS=`
 #rec .rc-act button,#rec .rc-act a{flex:1;min-width:0;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:14px;border:1px solid #d9d0ea;background:#f4f1fa;color:#48336C;font-weight:700;font-size:12.5px;line-height:1.1;font-family:inherit;text-decoration:none;cursor:pointer;padding:6px 4px}
 #rec .rc-act .ic{width:22px;height:22px;vertical-align:0}
 #rec .rc-act button:hover,#rec .rc-act a:hover{background:#ebe5f6}
-#rec .rc-act .pri{flex:1.35;background:#48336C;border-color:#48336C;color:#fff;box-shadow:0 4px 14px rgba(72,51,108,.35)}
-#rec .rc-act .pri:hover{background:#5a4082}
+#rec .rc-act .pri{flex:1.35;background:linear-gradient(180deg,#9266B2 0%,#7B4F9B 100%);border-color:transparent;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 4px 14px rgba(72,51,108,.35)}
+#rec .rc-act .pri:hover{background:linear-gradient(180deg,#8559A6,#6E4890)}
 #rec .rc-act .wa{color:#14633a;background:#e8f6ee;border-color:#bfe3cd}
 #rec button:focus-visible,#rec a:focus-visible{outline:3px solid #8156A1;outline-offset:2px}
 @media (min-width:720px){
