@@ -15,11 +15,13 @@ Sistema de gestão e vitrine pública da loja **Select Imports** (iPhones e cosm
 index.html            app de gestão (HTML + CSS + JS em um arquivo)
 vitrine/index.html    vitrine pública
 supabase-shim.js      login (e-mail, senha, 2FA), gravação segura entre aparelhos, fila offline, backups
+login.css             visual da abertura e do login (carrega no 1º frame, sem piscada)
 qr.js                 gerador de QR Code local (sem serviço externo)
 sw.js                 modo sem internet (service worker)
 config.js             configuração pública: URL e chave pública do Supabase + dados padrão da loja
 api/p.js              função da Vercel para a prévia dos links
 icons/                logos e ícones do app
+icons/startup/        imagens de abertura do iOS (uma por tamanho de iPhone, fundo igual ao da abertura)
 docs/supabase.md      tabelas, buckets e regras de acesso do banco
 scripts/check.mjs     verificações automáticas (npm run check)
 docs/workflows/       cópias dos workflows do GitHub (ver "Como atualizar o site")
